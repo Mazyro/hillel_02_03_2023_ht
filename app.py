@@ -17,6 +17,7 @@ def registration():
             return redirect('/login')
         else:
             add_to_file(email, password)
+            render_template('login.html')
     return render_template('registration.html')
 
 
