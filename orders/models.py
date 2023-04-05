@@ -1,14 +1,14 @@
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
 
-from products.models import Product
+# from products.models import Product
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
 
 
-User = get_user_model()
+# User = get_user_model()
 
 
 class Discount(PKMixin):
@@ -16,8 +16,12 @@ class Discount(PKMixin):
         ('percent', 'Percent'),
         ('amount', 'Amount'),
     )
-    discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPES, default='percent')
-    discount_value = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
+    discount_type = models.CharField(
+        max_length=10, choices=DISCOUNT_TYPES, default='percent'
+    )
+    discount_value = models.DecimalField(
+        max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0
+    )
     is_active = models.BooleanField(
         default=True
     )
@@ -60,10 +64,12 @@ class Order(PKMixin):
     )
 
     def __str__(self):
-        return f"Order №{self.order_number} Amount: {self.total_amount}. User: {User}"
+        return f"Order №{self.order_number} " \
+               f"Amount: {self.total_amount}. User: {User}"
 
     def calculate_total_price(self):
-        total_price = sum([item.calculate_price_with_discount() for item in self.items.all()])
+        total_price = sum([item.calculate_price_with_discount()
+                           for item in self.items.all()])
         discount_amount = self.calculate_discount_amount()
 
         return total_price - discount_amount
@@ -73,7 +79,8 @@ class Order(PKMixin):
 
         for discount in self.discounts.all():
             if discount.discount_type == 'percent':
-                discount_amount += (self.calculate_total_price() * (discount.discount_value / 100))
+                discount_amount += (self.calculate_total_price()
+                                    * (discount.discount_value / 100))
             else:
                 discount_amount += discount.discount_value
 
@@ -99,7 +106,9 @@ class OrderItem(PKMixin):
         decimal_places=DECIMAL_PLACES
     )
     is_active = models.BooleanField(default=True)
-    discounts = models.ManyToManyField(Discount, blank=True, related_name='order_items')
+    discounts = models.ManyToManyField(
+        Discount, blank=True, related_name='order_items'
+    )
 
     @property
     def total_price(self):
@@ -114,7 +123,8 @@ class OrderItem(PKMixin):
 
         for discount in self.discounts.all():
             if discount.discount_type == 'percent':
-                discount_amount += (self.total_price * (discount.discount_value / 100))
+                discount_amount += (self.total_price *
+                                    (discount.discount_value / 100))
             else:
                 discount_amount += discount.discount_value
 
