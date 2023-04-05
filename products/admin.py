@@ -1,3 +1,14 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# Register your models here.
+from products.models import Product, Category
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'is_active')
+    filter_horizontal = ('categories', 'products')
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    ist_display = ('name', 'description')
