@@ -1,24 +1,24 @@
-# from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
 
-# from products.models import Product
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
+from enum import Enum
 
 
-# User = get_user_model()
+# добавил класс Enum
+class DiscountType(Enum):
+    PERCENT = 'percent'
+    AMOUNT = 'amount'
+    
+
+discount_type_choices = [(tag.name, tag.value) for tag in DiscountType]
 
 
 class Discount(PKMixin):
-    DISCOUNT_TYPES = (
-        ('percent', 'Percent'),
-        ('amount', 'Amount'),
-    )
-    discount_type = models.CharField(
-        max_length=10, choices=DISCOUNT_TYPES, default='percent'
-    )
+
+    discount_type = models.CharField(choices=discount_type_choices, max_length=20)  # заменил по совету учителя
     discount_value = models.DecimalField(
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0
     )
@@ -37,8 +37,7 @@ class Discount(PKMixin):
 
 
 class Order(PKMixin):
-    # discount_type = Discount.discount_type
-    # discount_value = Discount.discount_value
+
     discount = models.ForeignKey(
         Discount,
         on_delete=models.SET_NULL,
@@ -109,6 +108,9 @@ class OrderItem(PKMixin):
     discounts = models.ManyToManyField(
         Discount, blank=True, related_name='order_items'
     )
+
+    def __str__(self):
+        return f"Order Item - {self.product} "
 
     @property
     def total_price(self):
