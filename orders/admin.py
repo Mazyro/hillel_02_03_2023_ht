@@ -5,7 +5,7 @@ from orders.models import Order, OrderItem
 
 @admin.register(Order)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('user', 'discount', 'order_number', 'total_amount')
+    list_display = ('user',  'order_number', 'total_amount')
     # filter_horizontal = ('categories', 'products')
 
 
