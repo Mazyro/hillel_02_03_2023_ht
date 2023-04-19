@@ -1,24 +1,31 @@
+from enum import Enum
+
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
-from enum import Enum
+
+
+User = get_user_model()
 
 
 # добавил класс Enum
 class DiscountType(Enum):
     PERCENT = 'percent'
     AMOUNT = 'amount'
-    
+
 
 discount_type_choices = [(tag.name, tag.value) for tag in DiscountType]
 
 
 class Discount(PKMixin):
 
-    discount_type = models.CharField(choices=discount_type_choices, max_length=20)  # заменил по совету учителя
+    discount_type = models.CharField(
+        choices=discount_type_choices, max_length=20
+    )  # заменил по совету учителя
     discount_value = models.DecimalField(
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0
     )
@@ -38,13 +45,6 @@ class Discount(PKMixin):
 
 class Order(PKMixin):
 
-    discount = models.ForeignKey(
-        Discount,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='orders'
-    )
     is_paid = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user = models.ForeignKey(
@@ -66,24 +66,27 @@ class Order(PKMixin):
         return f"Order №{self.order_number} " \
                f"Amount: {self.total_amount}. User: {User}"
 
+# для уникальности юзера
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user'],
+                                    condition=models.Q(is_active=True),
+                                    name='unique_is_active')
+        ]
+
     def calculate_total_price(self):
-        total_price = sum([item.calculate_price_with_discount()
-                           for item in self.items.all()])
-        discount_amount = self.calculate_discount_amount()
-
-        return total_price - discount_amount
-
-    def calculate_discount_amount(self):
-        discount_amount = 0
-
-        for discount in self.discounts.all():
-            if discount.discount_type == 'percent':
-                discount_amount += (self.calculate_total_price()
-                                    * (discount.discount_value / 100))
+        total_price = 0
+        for item in self.items.all():
+            if item.discount_type == DiscountType.PERCENT:
+                item_price = item.price * (100 - item.discount_value) / 100
+            elif item.discount_type == DiscountType.AMOUNT:
+                item_price = item.price - item.discount_value
             else:
-                discount_amount += discount.discount_value
+                item_price = item.price
 
-        return discount_amount
+            total_price += item_price * item.quantity
+
+        return total_price
 
 
 class OrderItem(PKMixin):
@@ -112,22 +115,6 @@ class OrderItem(PKMixin):
     def __str__(self):
         return f"Order Item - {self.product} "
 
-    @property
-    def total_price(self):
-        return self.price * self.quantity
-
-    def calculate_price_with_discount(self):
-        discount_amount = self.calculate_discount_amount()
-        return self.total_price - discount_amount
-
-    def calculate_discount_amount(self):
-        discount_amount = 0
-
-        for discount in self.discounts.all():
-            if discount.discount_type == 'percent':
-                discount_amount += (self.total_price *
-                                    (discount.discount_value / 100))
-            else:
-                discount_amount += discount.discount_value
-
-        return discount_amount
+# для уникальности заказа
+    class Meta:
+        unique_together = ('order', 'product')
