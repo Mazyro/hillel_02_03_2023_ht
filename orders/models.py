@@ -1,7 +1,7 @@
 from enum import Enum
 
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -9,7 +9,7 @@ from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
 
 
-User = get_user_model()
+# User = get_user_model() # I dont know why it needed?
 
 
 # добавил класс Enum

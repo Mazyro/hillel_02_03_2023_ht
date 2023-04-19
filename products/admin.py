@@ -1,9 +1,6 @@
 from django.contrib import admin
-from products.models import Product, Category
-
-from django.contrib import admin
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
+# from django.utils.safestring import mark_safe
 from .models import Product, Category
 
 
@@ -14,10 +11,11 @@ class ProductAdmin(admin.ModelAdmin):
 
     def get_image(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="64" height="64" />'.format(obj.image.url))
+            return format_html(
+                '<img src="{}" width="64" height="64" />'.format(obj.image.url)
+            )
         else:
             return ''
-
     get_image.short_description = 'Image'
 
 
@@ -27,12 +25,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def get_image(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="64" height="64" />'.format(obj.image.url))
+            return format_html(
+                '<img src="{}" width="64" height="64" />'.format(obj.image.url)
+            )
         else:
             return ''
 
     get_image.short_description = 'Image'
-
-
 # admin.site.register(Product, ProductAdmin)
 # admin.site.register(Category, CategoryAdmin)
