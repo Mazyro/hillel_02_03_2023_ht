@@ -1,5 +1,6 @@
 # from django.contrib.auth.models import User
-# так делать нельзя, мы не моем быть уверены что юзер именно в этой модели, для этого нужна следующая строка
+# так делать нельзя, мы не моем быть уверены что юзер
+# именно в этой модели, для этого нужна следующая строка
 
 from django.contrib.auth import get_user_model
 # и затем
@@ -85,7 +86,8 @@ class Order(PKMixin):
         return f"Order №{self.order_number} " \
                f"Amount: {self.total_amount}. User: {User}"
 
-# ддля валидации уникальности is_active=True и юзера, тоесть проверяем что  данного юзера только один активный ордер
+# ддля валидации уникальности is_active=True и юзера, тоесть
+    # проверяем что  данного юзера только один активный ордер
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user'],

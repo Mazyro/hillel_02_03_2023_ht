@@ -17,4 +17,3 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
     list_display = ('code', 'amount', 'discount_type')
-
