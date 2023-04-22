@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from orders.models import Order, OrderItem
+from orders.models import Order, OrderItem, Discount
 
 
 @admin.register(Order)
@@ -12,3 +12,9 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(OrderItem)
 class CategoryAdmin(admin.ModelAdmin):
     ist_display = ('product', 'quantity', 'price', 'is_active')
+
+
+@admin.register(Discount)
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ('code', 'amount', 'discount_type')
+

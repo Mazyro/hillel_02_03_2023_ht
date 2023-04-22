@@ -3,20 +3,11 @@ from os import path
 from django.core.validators import MinValueValidator
 from django.db import models
 from project.mixins.models import PKMixin
-from enum import Enum
 
 
 def upload_to(instance, filename):
     _name, extension = path.splitext(filename)
     return f'products/images/{str(instance.pk)}{extension}'
-
-
-class DiscountType(Enum):
-    PERCENT = 'percent'
-    AMOUNT = 'amount'
-
-
-discount_type_choices = [(tag.name, tag.value) for tag in DiscountType]
 
 
 # Category (name, description, image, created_at, updated_at)
