@@ -3,7 +3,7 @@ from django import forms
 from products.models import Product
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ValidationError
 
 
 class ProductForm(forms.Form):
@@ -27,9 +27,7 @@ class ProductForm(forms.Form):
         if is_valid:
             try:
                 Product.objects.get(name=self.cleaned_data['name'])
-                # self.errors.update(
-                #     {'product': 'product already exists'}
-                # )
+
                 is_valid
             except Product.DoesNotExist:
                 ...
@@ -37,6 +35,7 @@ class ProductForm(forms.Form):
 
     def save(self):
         return Product.objects.create(**self.cleaned_data)
+
 
 class ProductModelForm(forms.ModelForm):
     class Meta:
@@ -50,6 +49,3 @@ class ProductModelForm(forms.ModelForm):
         except Product.DoesNotExist:
             ...
         return self.cleaned_data['name']
-
-
-

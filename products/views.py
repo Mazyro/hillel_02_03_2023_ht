@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from products.forms import ProductForm, ProductModelForm
+from products.forms import ProductModelForm
 from products.models import Product
 
 
@@ -19,4 +19,3 @@ def products(request, *args, **kwargs):
         'products': products_list,
         'form': form,
     })
-

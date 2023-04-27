@@ -11,4 +11,6 @@ class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    rating = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    rating = models.IntegerField(
+        default=1, validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )

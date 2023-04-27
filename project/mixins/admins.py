@@ -1,5 +1,6 @@
 from django.utils.safestring import mark_safe
 
+
 # !!!!!!!!!!!!!разобраться
 class ImageSnapshotAdminMixin:
     def get_readonly_fields(self, request, obj=None):
