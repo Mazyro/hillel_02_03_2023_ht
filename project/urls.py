@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from products.urls import urlpatterns as products_urlpatterns
 from orders.urls import urlpatterns as orders_urlpatterns
+from feedbacks.urls import urlpatterns as feedbacks_urlpatterns
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include(products_urlpatterns)),
     path('orders/', include(orders_urlpatterns)),
+    path('feedbacks/', include(feedbacks_urlpatterns)),
 ]
 
 

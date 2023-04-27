@@ -1,36 +1,23 @@
-# from django.contrib.auth.models import User
-# так делать нельзя, мы не моем быть уверены что юзер
-# именно в этой модели, для этого нужна следующая строка
+import decimal
 
 from django.contrib.auth import get_user_model
-# и затем
-# User = get_user_model() в строке 16
-
-from django.core.validators import MinValueValidator
 from django.db import models
-from project.constants import MAX_DIGITS, DECIMAL_PLACES
-from project.mixins.models import PKMixin
-from project.choices import DiscountTypes
+from django.db.models import Sum, F
 from django.utils import timezone
 
+
+from project.constants import MAX_DIGITS, DECIMAL_PLACES
+from project.mixins.models import PKMixin
+from project.model_choices import DiscountTypes
 
 User = get_user_model()
 
 
-# добавил класс Enum
-# class DiscountType(Enum):
-#     PERCENT = 'percent'
-#     AMOUNT = 'amount'
-#
-#
-# discount_type_choices = [(tag.name, tag.value) for tag in DiscountType]
-
-
 class Discount(PKMixin):
-
     amount = models.DecimalField(
         max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES
+        decimal_places=DECIMAL_PLACES,
+        default=0
     )
     code = models.CharField(
         max_length=32,
@@ -64,30 +51,28 @@ class Discount(PKMixin):
 
 
 class Order(PKMixin):
-
-    is_paid = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    total_amount = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=0
+    )
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
-    order_number = models.CharField(max_length=255)
-
-    total_amount = models.DecimalField(
-        validators=[MinValueValidator(0)],
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES,
-        default=0
+    discount = models.ForeignKey(
+        Discount,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
+    is_active = models.BooleanField(default=True)
+    is_paid = models.BooleanField(default=False)
+    order_number = models.PositiveSmallIntegerField(default=1)
 
-    def __str__(self):
-        return f"Order №{self.order_number} " \
-               f"Amount: {self.total_amount}. User: {User}"
-
-# ддля валидации уникальности is_active=True и юзера, тоесть
-    # проверяем что  данного юзера только один активный ордер
+# у одного юзера однин заказ
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user'],
@@ -95,49 +80,44 @@ class Order(PKMixin):
                                     name='unique_is_active')
         ]
 
-    def calculate_total_price(self):
-        total_price = 0
-        # for item in self.items.all(): -> ...  items.iterator():
-        # for item in self.items.all():
-        for item in self.items.iterator():  # лучше итерироавться
-            if item.discount_type == DiscountTypes.PERCENT:
-                item_price = item.price * (100 - item.discount_value) / 100
-            elif item.discount_type == DiscountTypes.VALUE:
-                item_price = item.price - item.discount_value
-            else:
-                item_price = item.price
+    def __str__(self):
+        return f"{self.user} | {self.total_amount}"
 
-            total_price += item_price * item.quantity
+    # @property
+    # def is_current_order(self):
+    #     return self.is_active and not self.is_paid
 
-        return total_price
+    def get_total_amount(self):
+        total_amount = self.order_items.aggregate(
+            total_amount=Sum(F('price') * F('quantity'))
+        )['total_amount'] or 0
+        total_amount = decimal.Decimal(total_amount)
+        if self.discount and self.discount.is_valid:
+            total_amount = (
+                total_amount - self.discount.amount
+                if self.discount.discount_type == DiscountTypes.VALUE else
+                total_amount - (total_amount / 100 * self.discount.amount)
+            ).quantize(decimal.Decimal('.01'))
+        return total_amount
 
 
 class OrderItem(PKMixin):
+    is_active = models.BooleanField(default=True)
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.PROTECT,
+        related_name='order_items'
+    )
     product = models.ForeignKey(
         'products.Product',
         on_delete=models.PROTECT,
-        related_name='items'
-    )
-
-    order = models.ForeignKey(
-        Order,
-        on_delete=models.SET_NULL,
-        related_name='items',
-        null=True
+        related_name='order_items',
     )
     quantity = models.PositiveSmallIntegerField(default=1)
     price = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES
     )
-    is_active = models.BooleanField(default=True)
-    discounts = models.ManyToManyField(
-        Discount, blank=True, related_name='order_items'
-    )
 
-    def __str__(self):
-        return f"Order Item - {self.product} "
-
-# для уникальности заказа
     class Meta:
         unique_together = ('order', 'product')

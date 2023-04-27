@@ -10,8 +10,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(OrderItem)
-class CategoryAdmin(admin.ModelAdmin):
-    ist_display = ('product', 'quantity', 'price', 'is_active')
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('product', 'quantity', 'price', 'is_active', 'order')
 
 
 @admin.register(Discount)
