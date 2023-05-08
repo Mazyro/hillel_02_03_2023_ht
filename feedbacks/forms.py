@@ -1,5 +1,7 @@
 from django import forms
 from feedbacks.models import Feedback
+from django.utils.html import escape
+import bleach
 
 
 class FeedbackForm(forms.ModelForm):
@@ -11,6 +13,14 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
         fields = ('text', 'user', 'rating')
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        # очистка от специальных символов
+        text = escape(text)
+        # очистка от html
+        text = bleach.clean(text, strip=True)
+        return text
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

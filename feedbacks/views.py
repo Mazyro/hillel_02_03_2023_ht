@@ -1,13 +1,15 @@
 # from pyexpat.errors import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.decorators import login_required
+# from django.contrib import messages
 from django.views.generic import ListView, CreateView
-from django.utils.html import escape
-import bleach
+# from django.utils.html import escape
+# import bleach
 from feedbacks.forms import FeedbackForm
 from feedbacks.models import Feedback
-from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
+# from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class FeedbackList(ListView):
@@ -17,29 +19,16 @@ class FeedbackList(ListView):
     paginate_by = 10
 
 
-class FeedbackView(CreateView):
-    @method_decorator(login_required)
-    def get(self, request):
-        form = FeedbackForm(request.GET)
-        return render(request, 'feedbacks/feedback.html', {'form': form})
+class FeedbackView(LoginRequiredMixin, CreateView):
+    model = Feedback
+    form_class = FeedbackForm
+    template_name = 'feedbacks/feedback.html'
+    success_url = reverse_lazy('feedbacks')
 
-    @method_decorator(login_required)
-    def post(self, request):
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            feedback = form.save(commit=False)
-            feedback.user = request.user
-            # очистка от специальных символов
-            feedback.text = escape(form.cleaned_data['text'])
-            # очистка от html
-            feedback.text = bleach.clean(feedback.text, strip=True)
-            feedback.save()
-            messages.success(request, 'Отзыв успешно добавлен!')
-            return redirect('feedbacks')
-        else:
-            messages.error(request, 'Ошибка при добавлении отзыва. '
-                                    'Пожалуйста, исправьте ошибки ниже.')
-        return render(request, 'feedbacks/feedback.html', {'form': form})
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        # form.instance.text = bleach.clean(form.instance.text, strip=True)
+        return super().form_valid(form)
 
 
 # from django.contrib.auth.decorators import login_required
