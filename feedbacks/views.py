@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+# from pyexpat.errors import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -29,13 +29,16 @@ class FeedbackView(CreateView):
         if form.is_valid():
             feedback = form.save(commit=False)
             feedback.user = request.user
-            feedback.text = escape(form.cleaned_data['text'])  # очистка от специальных символов
-            feedback.text = bleach.clean(feedback.text, strip=True)  # очистка от html
+            # очистка от специальных символов
+            feedback.text = escape(form.cleaned_data['text'])
+            # очистка от html
+            feedback.text = bleach.clean(feedback.text, strip=True)
             feedback.save()
             messages.success(request, 'Отзыв успешно добавлен!')
             return redirect('feedbacks')
         else:
-            messages.error(request, 'Ошибка при добавлении отзыва. Пожалуйста, исправьте ошибки ниже.')
+            messages.error(request, 'Ошибка при добавлении отзыва. '
+                                    'Пожалуйста, исправьте ошибки ниже.')
         return render(request, 'feedbacks/feedback.html', {'form': form})
 
 

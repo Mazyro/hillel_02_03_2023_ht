@@ -16,4 +16,5 @@ class FeedbackForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].widget = forms.HiddenInput()
         self.fields['user'].initial = user
-        self.fields['rating'].help_text = "Rating should be from 1 to 5 points."
+        self.fields['rating'].help_text = "Rating should be" \
+                                          " from 1 to 5 points."
