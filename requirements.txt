@@ -5,3 +5,4 @@ django-environ==0.10.0
 Pillow==9.5.0
 Faker==18.3.4
 pylint-django==2.5.3
+bleach==6.0.0
