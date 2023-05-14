@@ -24,5 +24,4 @@ class ImageSnapshotAdminMixin:
         if not obj.image:
             return 'No image'
         return f'<img src="{obj.image.url}" width="64" height="64"/>'
-
     image_field.short_description = 'Image snapshot'

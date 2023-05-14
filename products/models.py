@@ -57,17 +57,4 @@ class Product(PKMixin):
     def __str__(self):
         return self.name
 
-    # discount_type = models.CharField(
-    #     choices=discount_type_choices, max_length=20
-    # )
-    # discount_value = models.DecimalField(
-    # max_digits=5, decimal_places=2, default=0
-    # )
-    #
-    # def get_discount_amount(self):
-    #     if self.discount_type == DiscountType.PERCENT:
-    #         return self.price * (self.discount_value / 100)
-    #     elif self.discount_type == DiscountType.AMOUNT:
-    #         return self.discount_value
-    #     else:
-    #         return 0
+
