@@ -1,6 +1,36 @@
+
+from django.contrib.auth import login
+from django.shortcuts import redirect
+
+from django.views.generic import CreateView
+
+from accounts.forms import RegistrationForm
+from project import settings
+
+
+class RegistrationView(CreateView):
+    form_class = RegistrationForm
+    template_name = 'registration/registration.html'
+    success_url = settings.LOGIN_REDIRECT_URL
+
+    def form_valid(self, form):
+        # Сохраняем пользователя в базу
+        user = form.save(commit=False)
+        user.username = user.email.split('@')[0]
+        user.is_active = True
+        user.is_staff = False
+        user.is_superuser = False
+        user.set_password(form.cleaned_data.get('password'))
+        user.save()
+
+        # Авторизуем пользователя
+        login(self.request, user)
+
+        return redirect(self.success_url)
+
+# new realization to be used
 # from django.views.generic import FormView, RedirectView
-# from django.contrib.auth.forms import AuthenticationForm
-#
+# from django.contrib.auth.forms import AuthenticationForm#
 # from accounts.forms import LoginForm
 # from django.contrib.auth import login, logout
 #

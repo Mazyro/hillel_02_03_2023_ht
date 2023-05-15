@@ -1,3 +1,20 @@
+from django.contrib.auth import get_user_model
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
+User = get_user_model()
+
+
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True, help_text='Required')
+
+    class Meta:
+        model = User
+        fields = ("email",)
+
+
+# ===========================================================================
+# new realization of views to be used, not need any more
 # from django import forms
 # from django.contrib.auth import authenticate
 #
