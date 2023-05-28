@@ -25,7 +25,8 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
             if self.request:
-                login(self.request, user)  # Автоматический вход после регистрации
+                # Автоматический вход после регистрации
+                login(self.request, user)
         return user
 
 
