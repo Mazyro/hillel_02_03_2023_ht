@@ -1,7 +1,9 @@
+from urllib import request
+
 from django.shortcuts import render
 
 
-# Create your views here.
-def orders(request, *args, **kwargs):
-    # breakpoint()
-    return render(request, 'orders/index.html')
+class OrderView:
+    def orders(self, *args, **kwargs):
+        # breakpoint()
+        return render(request, 'orders/index.html')
