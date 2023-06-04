@@ -42,6 +42,10 @@ class ProductModelForm(forms.ModelForm):
         model = Product
         fields = ('name', 'description', 'sku', 'image', 'price')
 
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
     def clean_name(self):
         try:
             Product.objects.get(name=self.cleaned_data['name'])

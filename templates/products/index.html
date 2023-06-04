@@ -7,7 +7,7 @@
 <body>
 <h1>Товары!</h1>
 {% for product in products %}
-    <img src="{{ product.image.url }}" style="width: 80px;">
+    {% if product.image %}<img src="{{ product.image.url }}" style="width: 80px;">{% endif %}
     <p>{{ product.name }} - {{ product.price }}  </p>
 {% endfor %}
 <div>
@@ -24,13 +24,13 @@
 <!--        <label for="id_image">Image</label>-->
 <!--        <input id="id_image" type="file" name="image">-->
         {{ form.as_p }}
+<!--        {% for field in form %}-->
+
+<!--        {% endfor %}-->
         <input type="submit" value="Save">
         {% for name, error in form.errors.items %}
             <p> {{ error }}</p>
         {% endfor %}
-
-
-
     </form>
 </div>
 </body>

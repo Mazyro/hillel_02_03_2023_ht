@@ -2,11 +2,13 @@ from django.contrib.auth import login
 from django.views.generic import CreateView
 
 from accounts.forms import RegistrationForm
+
 from project import settings
 
 
 class RegistrationView(CreateView):
     form_class = RegistrationForm
+
     template_name = 'registration/registration.html'
     success_url = settings.LOGIN_REDIRECT_URL
 
