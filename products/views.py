@@ -26,6 +26,7 @@ from django.views import View
 from products.forms import ProductModelForm
 from products.models import Product
 
+
 class ProductsView(View):
     def get(self, request, *args, **kwargs):
         form = ProductModelForm()
