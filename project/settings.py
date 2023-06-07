@@ -44,10 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # external packages
+    'widget_tweaks',
+    # internal packages
     'products',
     'orders',
     'feedbacks',
     'accounts',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -110,8 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGOUT_REDIRECT_URL = '/feedbacks/'
-LOGIN_REDIRECT_URL = reverse_lazy('login')
+
+LOGIN_REDIRECT_URL = reverse_lazy("main")
+LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

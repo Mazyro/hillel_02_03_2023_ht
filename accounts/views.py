@@ -8,7 +8,6 @@ from project import settings
 
 class RegistrationView(CreateView):
     form_class = RegistrationForm
-
     template_name = 'registration/registration.html'
     success_url = settings.LOGIN_REDIRECT_URL
 

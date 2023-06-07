@@ -1,36 +1,24 @@
 from django import forms
-
 from products.models import Product
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
-
 from django.core.exceptions import ValidationError
 
 
 class ProductForm(forms.Form):
-    name = forms.CharField(
-        max_length=255
-    )
-    description = forms.CharField(
-        max_length=1000
-    )
-    price = forms.DecimalField(
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES
-    )
-    sku = forms.CharField(
-        max_length=25
-    )
+    name = forms.CharField(max_length=255)
+    description = forms.CharField(max_length=1000)
+    price = forms.DecimalField(max_digits=MAX_DIGITS,
+                               decimal_places=DECIMAL_PLACES
+                               )
+    sku = forms.CharField(max_length=25)
     image = forms.ImageField()
 
     def is_valid(self):
         is_valid = super().is_valid()
         if is_valid:
-            try:
-                Product.objects.get(name=self.cleaned_data['name'])
-
-                is_valid
-            except Product.DoesNotExist:
-                ...
+            if Product.objects.filter(name=self.cleaned_data['name']).exists():
+                self.add_error('name', 'Product already exists')
+                is_valid = False
         return is_valid
 
     def save(self):
@@ -46,9 +34,6 @@ class ProductModelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def clean_name(self):
-        try:
-            Product.objects.get(name=self.cleaned_data['name'])
-            raise ValidationError('Product already exists ')
-        except Product.DoesNotExist:
-            ...
+        if Product.objects.filter(name=self.cleaned_data['name']).exists():
+            raise ValidationError('Product already exists')
         return self.cleaned_data['name']

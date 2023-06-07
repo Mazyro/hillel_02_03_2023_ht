@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-  <h1>Your orders</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-3" >
+    <h2>Your orders</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+
+    </form>
+</div>
+
+{% endblock content%}

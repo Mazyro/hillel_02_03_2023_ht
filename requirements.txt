@@ -6,3 +6,4 @@ Pillow==9.5.0
 Faker==18.3.4
 pylint-django==2.5.3
 bleach==6.0.0
+django-widget-tweaks==1.4.12
