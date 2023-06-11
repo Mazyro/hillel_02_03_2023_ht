@@ -14,7 +14,7 @@
         <li class="nav-item">
           <a class="nav-link"
              href="{% if user.is_superuser %}{% url 'admin:index' %}{% else %}{% endif %}">
-            {% if user.is_superuser %}Adminka{% else %}""{% endif %}
+            {% if user.is_superuser %}Adminka{% else %}{% endif %}
           </a>
         </li>
         <li class="nav-item dropdown">
