@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+<title>{% block title %}
+    Feedback List
+{% endblock title %}</title>
+
+{% block content %}
+<h1>Все отзывы</h1>
+
+<a href="{% url 'feedback' %}">Добавить отзыв</a>
+
+<div class="col-12 col-lg-6 offset-lg-3" >
+    <ul class="list-group py-3">
+        {% for feedback in object_list %}
+        <li class="list-group-item">
+            <span class="btn btn-primary" data-bs-toggle="collapse" href="#collapse{{ feedback.id }}">
+                <span>{{ feedback.created_at }}</span>
+                {{ feedback.user.first_name }}
+            </span>
+            <div>
+                <div class="collapse" id="collapse{{ feedback.id }}">
+                  <div class="card card-body">
+                      <div>
+                        Rating: {{ feedback.rating }}
+                      </div>
+                    {{ feedback.text }}
+                  </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!--{% for feedback in object_list %}-->
+<!--    <div class="feedback">-->
+<!--        <p class="info">-->
+<!--            Отзыв:{{ forloop.counter }} от: {{ feedback.user }} с рейтингом: {{ feedback.rating }} от:-->
+<!--            {{ feedback.created_at }}-->
+<!--        </p>-->
+<!--        Текст отзыва: {{ feedback.text }}-->
+<!--    </div>-->
+<!--{% empty %}-->
+<!--    <p>Еще пока нет отзывов/p>-->
+<!--{% endfor %}-->
+
+{% endblock content%}

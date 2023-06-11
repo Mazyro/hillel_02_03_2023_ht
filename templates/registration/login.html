@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block body_class %}login aaaa{% endblock body_class %}
+{% block content %}
+<div class="py-3" >
+    <h2>Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {% include 'parts/form.html' with form=form %}
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+</div>
+<div>
+    <br>
+    <a href="{% url 'registration' %}">Don`t have account yet? Signup.</a>
+</div>
+{% endblock content%}
