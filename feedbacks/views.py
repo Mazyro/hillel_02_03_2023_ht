@@ -10,7 +10,8 @@ class FeedbackList(ListView):
     model = Feedback
     template_name = 'feedbacks/feedback_list.html'
     context_object_name = 'feedbacks'
-    ordering = ['-created_at']  # Сортировка по полю created_at в обратном порядке
+    # Сортировка по полю created_at в обратном порядке
+    ordering = ['-created_at']
 
 
 class FeedbackView(CreateView):
