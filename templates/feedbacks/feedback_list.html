@@ -12,18 +12,27 @@
     <ul class="list-group py-3">
         {% for feedback in object_list %}
         <li class="list-group-item">
-            <span class="btn btn-primary" data-bs-toggle="collapse" href="#collapse{{ feedback.id }}">
-                <span>{{ feedback.created_at }}</span>
-                {{ feedback.user.first_name }}
+            <span class="btn btn-outline-primary"
+                  data-bs-toggle="collapse"
+                  href="#collapse{{ feedback.id }}">
+            {{ feedback.user.first_name }}
+                {% for _ in ""|rjust:feedback.rating %}
+                    <span class="fa fa-star text-warning" ></span>
+                {% endfor %}
+                {{ feedback.created_at }}
             </span>
+
             <div>
                 <div class="collapse" id="collapse{{ feedback.id }}">
-                  <div class="card card-body">
-                      <div>
-                        Rating: {{ feedback.rating }}
-                      </div>
-                    {{ feedback.text }}
-                  </div>
+                    <div class="card card-body">
+                        <div>
+                            Rating:
+                            {% for _ in ""|rjust:feedback.rating %}
+                                <span class="fa fa-star text-warning" ></span>
+                            {% endfor %}
+                        </div>
+                        {{ feedback.text }}
+                    </div>
                 </div>
             </div>
         </li>
