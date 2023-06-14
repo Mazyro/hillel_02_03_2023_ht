@@ -1,7 +1,13 @@
+import csv
+import decimal
+from io import StringIO
+
 from django import forms
 from products.models import Product
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from django.core.exceptions import ValidationError
+
+from django.core.validators import FileExtensionValidator
 
 
 class ProductForm(forms.Form):
@@ -37,3 +43,34 @@ class ProductModelForm(forms.ModelForm):
         if Product.objects.filter(name=self.cleaned_data['name']).exists():
             raise ValidationError('Product already exists')
         return self.cleaned_data['name']
+
+
+class ImportCSVForm(forms.Form):
+    file = forms.FileField(
+        validators=[FileExtensionValidator(['csv'])]
+    )
+
+    def clean_file(self):
+        csv_file = self.cleaned_data['file']
+        reader = csv.DictReader(StringIO(csv_file.read().decode('utf-8')))
+        products_list = []
+        for product in reader:
+            try:
+                products_list.append(
+                    Product(
+                        name=product['name'],
+                        description=product['description'],
+                        price=decimal.Decimal(product['price']),
+                        sku=product['sku'],
+                        is_active=product['is_active']
+                    )
+                )
+            except (KeyError, decimal.InvalidOperation) as err:
+                raise ValidationError(err)
+        if not products_list:
+            raise ValidationError('Wrong file format.')
+        return products_list
+
+    def save(self):
+        products_list = self.cleaned_data['file']
+        Product.objects.bulk_create(products_list)

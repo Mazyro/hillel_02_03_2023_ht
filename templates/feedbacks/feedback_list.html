@@ -19,7 +19,7 @@
                 {% for _ in ""|rjust:feedback.rating %}
                     <span class="fa fa-star text-warning" ></span>
                 {% endfor %}
-                {{ feedback.created_at }}
+                {{ feedback.created_at|date:"d M Y" }}
             </span>
 
             <div>

@@ -32,7 +32,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled">{% if user.is_authenticated %}Привет, {{ user.username }}!
+          <a class="nav-link disabled">{% if user.is_authenticated %}Привет, {{ user.username }}-{{ user.is_superuser }}!
           {% else %}Войдите, чтобы получить доступ к контенту.
           {% endif %}</a>
         </li>
