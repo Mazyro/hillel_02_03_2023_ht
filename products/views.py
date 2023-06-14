@@ -89,7 +89,7 @@ def export_csv_tameplate(request, *args, **kwargs):
         'Content-Tpe': 'text/csv',
         'Content-Disposition': 'attachment; filename="products.csv"'
     }
-    fields_name = ['name', 'description', 'price', 'sku']
+    fields_name = ['name', 'description', 'price', 'sku', 'is_active']
     response = HttpResponse(headers=headers)
     writer = csv.DictWriter(response, fieldnames=fields_name)
     writer.writeheader()
