@@ -29,9 +29,6 @@ from products.models import Product
 
 from django.http import HttpResponse
 
-# from reportlab.lib.pagesizes import letter
-# from reportlab.pdfgen import canvas
-
 from django.template.loader import render_to_string  # get_template,
 
 from django.urls import reverse_lazy
@@ -90,20 +87,12 @@ def export_csv_tameplate(request, *args, **kwargs):
         'Content-Tpe': 'text/csv',
         'Content-Disposition': 'attachment; filename="products.csv"'
     }
-    fields_name = ['name', 'description', 'price', 'sku', 'is_active']
+    fields_name = [
+        'name', 'description', 'price', 'sku', 'category', 'is_active'
+    ]
     response = HttpResponse(headers=headers)
     writer = csv.DictWriter(response, fieldnames=fields_name)
     writer.writeheader()
-    #
-    # for product in products_list:
-    #     writer.writerow(
-    #         {
-    #             'name': product.name,
-    #             'description': product.description,
-    #             'price': product.price,
-    #             'sku': product.sku
-    #         }
-    #     )
     return response
 
 
