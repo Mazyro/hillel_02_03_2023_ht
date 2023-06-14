@@ -82,6 +82,34 @@ def export_csv(request, *args, **kwargs):
         )
     return response
 
+def export_csv_tameplate(request, *args, **kwargs):
+    # products_list = Product.objects.all()
+
+    headers = {
+        'Content-Tpe': 'text/csv',
+        'Content-Disposition': 'attachment; filename="products.csv"'
+    }
+    fields_name = ['name', 'description', 'price', 'sku']
+    response = HttpResponse(headers=headers)
+    writer = csv.DictWriter(response, fieldnames=fields_name)
+    writer.writeheader()
+    #
+    # for product in products_list:
+    #     writer.writerow(
+    #         {
+    #             'name': product.name,
+    #             'description': product.description,
+    #             'price': product.price,
+    #             'sku': product.sku
+    #         }
+    #     )
+    return response
+
+
+
+
+
+
 
 class ExportToPdf(TemplateView):
     template_name = 'products/pdf.html'
