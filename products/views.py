@@ -125,6 +125,11 @@ class ExportToPdf(TemplateView):
         return response
 
 
+# класс наследуется от FormView, который предоставляет функциональность
+# для работы с формами.# Декораторы login_required и user_passes_test
+# используются для проверки аутентификации пользователя и его статуса
+# (должен быть сотрудником), чтобы разрешить доступ только
+# авторизованным сотрудникам.
 class ImportCSV(FormView):
     form_class = ImportCSVForm
     template_name = 'products/import_csv.html'
@@ -135,6 +140,11 @@ class ImportCSV(FormView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    # Метод form_valid вызывается, когда форма проходит валидацию,
+    # и в нем вызывается form.save() для сохранения данных из CSV
+    # файла в базе данных.Таким образом, код обрабатывает загрузку
+    # CSV файла с продуктами, проверяет их корректность и сохраняет
+    # в базе данных с помощью массовой операции bulk_create.
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)

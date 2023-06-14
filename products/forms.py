@@ -52,10 +52,12 @@ class ImportCSVForm(forms.Form):
 
     def clean_file(self):
         csv_file = self.cleaned_data['file']
+        # чтение и парсинг CSV файла с помощью csv.DictReader.
         reader = csv.DictReader(StringIO(csv_file.read().decode('utf-8')))
         products_list = []
         for product in reader:
             try:
+                # создание экземпляров модели Product
                 products_list.append(
                     Product(
                         name=product['name'],
@@ -71,6 +73,8 @@ class ImportCSVForm(forms.Form):
             raise ValidationError('Wrong file format.')
         return products_list
 
+    # В методе save формы происходит массовое создание
+    # записей продуктов с помощью Product.objects.bulk_create.
     def save(self):
         products_list = self.cleaned_data['file']
         Product.objects.bulk_create(products_list)
