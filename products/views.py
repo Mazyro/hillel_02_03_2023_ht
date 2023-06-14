@@ -82,6 +82,7 @@ def export_csv(request, *args, **kwargs):
         )
     return response
 
+
 def export_csv_tameplate(request, *args, **kwargs):
     # products_list = Product.objects.all()
 
@@ -104,11 +105,6 @@ def export_csv_tameplate(request, *args, **kwargs):
     #         }
     #     )
     return response
-
-
-
-
-
 
 
 class ExportToPdf(TemplateView):
