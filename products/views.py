@@ -39,20 +39,24 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 class ProductsView(View):
     def get(self, request, *args, **kwargs):
         form = ProductModelForm()
-        products_list = Product.objects.all()
+        # exclude accessories
+        products_list = Product.objects.exclude(categories__name='Accessories')
         return render(request, 'products/index.html', context={
             'products': products_list,
             'form': form,
+            # 'key': request.key, для теста мидлвары TrackingMiddleware
         })
 
     def post(self, request, *args, **kwargs):
         form = ProductModelForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-        products_list = Product.objects.all()
+        # exclude accessories
+        products_list = Product.objects.exclude(categories__name='Accessories')
         return render(request, 'products/index.html', context={
             'products': products_list,
             'form': form,
+
         })
 
 

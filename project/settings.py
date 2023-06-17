@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     'feedbacks',
     'accounts',
     'main',
+    'tracking',
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,6 +64,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'project.middlewares.TrackingMiddleware',
+    # Моя middleware для обработки ошибок
+    'project.middlewares.ErrorHandlingMiddleware',
+
 ]
 
 ROOT_URLCONF = 'project.urls'
