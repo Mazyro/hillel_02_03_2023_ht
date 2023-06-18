@@ -67,7 +67,6 @@ MIDDLEWARE = [
     'project.middlewares.TrackingMiddleware',
     # Моя middleware для вывода стр что есть ошибка
     'project.middlewares.ErrorHandlingMiddleware',
-
 ]
 
 ROOT_URLCONF = 'project.urls'
