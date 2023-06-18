@@ -8,6 +8,8 @@ from django.utils import timezone
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
 from project.model_choices import DiscountTypes
+from django_lifecycle import AFTER_SAVE, hook, \
+    AFTER_UPDATE
 
 User = get_user_model()
 
@@ -103,6 +105,11 @@ class Order(PKMixin):
             ).quantize(decimal.Decimal('.01'))
         return total_amount
 
+    @hook(AFTER_UPDATE, when='discount', has_changed=True)
+    def set_total_amount(self):
+        self.total_amount = self.get_total_amount()
+        self.save(update_fields=('total_amount',), skip_hooks=True)
+
 
 class OrderItem(PKMixin):
     is_active = models.BooleanField(default=True)
@@ -124,3 +131,12 @@ class OrderItem(PKMixin):
 
     class Meta:
         unique_together = ('order', 'product')
+
+    @property
+    def sub_total(self):
+        return self.product.price * self.quantity
+
+    @hook(AFTER_SAVE)
+    def set_order_total_amount(self):
+        self.order.total_amount = self.order.get_total_amount()
+        self.order.save(update_fields=('total_amount',), skip_hooks=True)
