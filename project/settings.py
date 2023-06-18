@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'project.middlewares.TrackingMiddleware',
-    # Моя middleware для обработки ошибок
+    # Моя middleware для вывода стр что есть ошибка
     'project.middlewares.ErrorHandlingMiddleware',
 
 ]

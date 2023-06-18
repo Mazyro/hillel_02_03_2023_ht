@@ -5,7 +5,6 @@ from django.db import models
 from django.db.models import Sum, F
 from django.utils import timezone
 
-
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
 from project.model_choices import DiscountTypes
@@ -31,7 +30,9 @@ class Discount(PKMixin):
         default=DiscountTypes.VALUE
     )
     discount_value = models.DecimalField(
-        max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=0
     )
     valid_until = models.DateTimeField(
         null=True,
@@ -39,14 +40,14 @@ class Discount(PKMixin):
     )
 
     def __str__(self):
-        return f"{self.amount} | {self.code} | " \
+        return f"{self.discount_value} | {self.code} | " \
                f"{DiscountTypes(self.discount_type).label}"
 
     @property
     def is_valid(self):
         is_valid = self.is_active
         if self.valid_until:
-            is_valid &= timezone.now() <= self.valid_until
+            is_valid &= (timezone.now() <= self.valid_until)
         return is_valid
 
 
@@ -81,11 +82,13 @@ class Order(PKMixin):
         ]
 
     def __str__(self):
-        return f"{self.user} | {self.total_amount}"
+        return f"User: {self.user}  " \
+               f"Total amount: {self.total_amount}  " \
+               f"Discount: ({ self.discount })"
 
-    # @property
-    # def is_current_order(self):
-    #     return self.is_active and not self.is_paid
+    @property
+    def is_current_order(self):
+        return self.is_active and not self.is_paid
 
     def get_total_amount(self):
         total_amount = self.order_items.aggregate(
