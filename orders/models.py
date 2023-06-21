@@ -45,6 +45,7 @@ class Discount(PKMixin):
         return f"{self.discount_value} | {self.code} | " \
                f"{DiscountTypes(self.discount_type).label}"
 
+    # проверяем на то чтобы акция была актуальной
     @property
     def is_valid(self):
         is_valid = self.is_active
@@ -75,7 +76,9 @@ class Order(PKMixin):
     is_paid = models.BooleanField(default=False)
     order_number = models.PositiveSmallIntegerField(default=1)
 
-# у одного юзера однин заказ
+    # UniqueConstraint, который гарантирует, что у
+    # каждого пользователя (user) может быть только
+    # один активный заказ.
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user'],
@@ -88,6 +91,10 @@ class Order(PKMixin):
                f"Total amount: {self.total_amount}  " \
                f"Discount: ({ self.discount })"
 
+    # Это свойство (property), которое определяет,
+    # является ли заказ текущим. Заказ считается
+    # текущим, если он активен (is_active=True)
+    # и не оплачен (is_paid=False).
     @property
     def is_current_order(self):
         return self.is_active and not self.is_paid
@@ -105,10 +112,18 @@ class Order(PKMixin):
             ).quantize(decimal.Decimal('.01'))
         return total_amount
 
+    #  Это метод-хук (hook), который вызывается после
+    #  обновления заказа.
+    #  Он обновляет поле total_amount вызовом метода
+    #  get_total_amount()
+    #  и сохраняет изменения, пропуская хуки, чтобы
+    #  избежать рекурсивных вызовов.
+    # убрал skip_hooks=True в save по скольку была оошибка
+    # Model.save() got an unexpected keyword argument 'skip_hooks'
     @hook(AFTER_UPDATE, when='discount', has_changed=True)
     def set_total_amount(self):
         self.total_amount = self.get_total_amount()
-        self.save(update_fields=('total_amount',), skip_hooks=True)
+        self.save(update_fields=('total_amount',), )
 
 
 class OrderItem(PKMixin):
@@ -129,13 +144,24 @@ class OrderItem(PKMixin):
         decimal_places=DECIMAL_PLACES
     )
 
+    # Это внутренний класс Meta, который
+    # определяет уникальность пары полей order и product.
+    # Это гарантирует, что каждый товар в заказе является уникальным.
     class Meta:
         unique_together = ('order', 'product')
 
+    # Это свойство (property), которое вычисляет
+    # подытог для данного товара. Оно умножает
+    # цену товара на количество и возвращает результат.
     @property
     def sub_total(self):
         return self.product.price * self.quantity
 
+    # Это метод-хук (hook), который вызывается после
+    # сохранения товара в заказе.
+    # Он обновляет общую сумму заказа, вызывая метод get_total_amount()
+    # у связанного объекта order и сохраняет изменения, пропуская хуки,
+    # чтобы избежать рекурсивных вызовов.
     @hook(AFTER_SAVE)
     def set_order_total_amount(self):
         self.order.total_amount = self.order.get_total_amount()

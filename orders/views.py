@@ -8,6 +8,7 @@ from django.views.generic import FormView, RedirectView
 
 from orders.mixins import GetCurrentOrderMixin
 from orders.forms import CartForm, CartActionForm
+from django.http import HttpResponseRedirect
 
 
 # rewritte in OOP
@@ -72,47 +73,84 @@ class OrdersView(View):
 #         return redirect('cart')
 
 
+# представление, отображающее корзину и обрабатывающее форму
 class CartView(GetCurrentOrderMixin, FormView):
+    #: указывает класс формы, используемой представлением,
+    # в данном случае - CartForm.
     form_class = CartForm
     template_name = 'orders/cart.html'
-    success_url = None
+    # : указывает URL, на который будет перенаправлен
 
+    # метод-хук, применяющий декоратор login_required
+    # для требования аутентификации пользователя
+    # перед доступом к представлению.
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    #  метод, возвращающий URL для перенаправления
+    #  пользователя после успешной обработки формы.
     def get_success_url(self):
         return reverse('cart')
 
+    #  метод, возвращающий контекст данных для
+    #  передачи в шаблон.
+    #  Он добавляет объект order и связанные с ним
+    #  объекты order_items в контекст.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order = self.get_object()
+        cart_items_count = order.order_items.count() if order else 0
         context.update({
             'order': order,
             # 'order_items': order.order_items.all()
-            'order_items': order.order_items.select_related('product').all()
+            'order_items': order.order_items.select_related('product').all(),
+            'cart_items_count': cart_items_count
         })
         return context
 
+    # метод, возвращающий аргументы для создания
+    # экземпляра формы. В данном случае,
+    # он добавляет instance (текущий заказ) в аргументы формы.
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({'instance': self.get_object()})
         return kwargs
 
+    # метод, вызываемый при успешной валидации формы.
+    # Он сохраняет данные формы с помощью метода save() формы.
     def form_valid(self, form):
+        # breakpoint()
         form.save()
         return super().form_valid(form)
 
 
+#  представление, обрабатывающее действия в корзине,
+#  такие как добавление товара,
+#  удаление товара, очистка корзины и оплата.
+#  Оно также наследуется от GetCurrentOrderMixin и RedirectView
 class CartActionView(GetCurrentOrderMixin, RedirectView):
-    url = reverse_lazy('cart')
+    url = reverse_lazy('products')
 
+    #  метод-хук, применяющий декоратор login_required
+    #  для требования аутентификации пользователя перед доступом
+    #  к представлению
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    #  метод, обрабатывающий POST-запросы.
+    #  Он создает экземпляр формы CartActionForm с переданными данными POST
+    #  и текущим заказом, а затем вызывает метод action() формы,
+    #  передавая действие (action) из параметров запроса.
     def post(self, request, *args, **kwargs):
         form = CartActionForm(request.POST, instance=self.get_object())
+        # Если форма валидна, то выполняется
+        # соответствующее действие (add, pay, remove, clear).
         if form.is_valid():
-            form.action(kwargs.get('action'))
+            action = self.kwargs['action']
+            if action == 'remove':
+                form.action(kwargs.get('action'))
+                return HttpResponseRedirect(reverse('cart'))
+        form.action(kwargs.get('action'))
         return self.get(request, *args, **kwargs)

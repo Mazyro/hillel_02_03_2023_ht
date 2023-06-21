@@ -66,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'project.middlewares.TrackingMiddleware',
     # Моя middleware для вывода стр что есть ошибка
-    'project.middlewares.ErrorHandlingMiddleware',
+    # 'project.middlewares.ErrorHandlingMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
