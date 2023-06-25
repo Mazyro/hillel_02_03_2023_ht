@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # external packages
     'widget_tweaks',
+    'django_celery_results',
     # internal packages
     'products',
     'orders',
@@ -148,3 +149,8 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
+
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_TASK_ALWAYS_EAGER = True

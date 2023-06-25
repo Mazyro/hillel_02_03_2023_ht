@@ -8,7 +8,8 @@ from django.utils import timezone
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from project.mixins.models import PKMixin
 from project.model_choices import DiscountTypes
-from django_lifecycle import AFTER_SAVE, hook, \
+
+from django_lifecycle import LifecycleModelMixin, AFTER_SAVE, hook, \
     AFTER_UPDATE
 
 User = get_user_model()
@@ -54,7 +55,7 @@ class Discount(PKMixin):
         return is_valid
 
 
-class Order(PKMixin):
+class Order(LifecycleModelMixin, PKMixin):
     total_amount = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
@@ -110,6 +111,7 @@ class Order(PKMixin):
                 if self.discount.discount_type == DiscountTypes.VALUE else
                 total_amount - (total_amount / 100 * self.discount.amount)
             ).quantize(decimal.Decimal('.01'))
+
         return total_amount
 
     #  Это метод-хук (hook), который вызывается после
@@ -118,15 +120,14 @@ class Order(PKMixin):
     #  get_total_amount()
     #  и сохраняет изменения, пропуская хуки, чтобы
     #  избежать рекурсивных вызовов.
-    # убрал skip_hooks=True в save по скольку была оошибка
-    # Model.save() got an unexpected keyword argument 'skip_hooks'
+
     @hook(AFTER_UPDATE, when='discount', has_changed=True)
     def set_total_amount(self):
         self.total_amount = self.get_total_amount()
-        self.save(update_fields=('total_amount',), )
+        self.save(update_fields=('total_amount',), skip_hooks=True)
 
 
-class OrderItem(PKMixin):
+class OrderItem(LifecycleModelMixin, PKMixin):
     is_active = models.BooleanField(default=True)
     order = models.ForeignKey(
         Order,

@@ -7,6 +7,10 @@ from feedbacks.models import Feedback
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+from time import sleep
+
+from project.celery import debug_task
+
 
 class FeedbackList(UserPassesTestMixin, ListView):
     model = Feedback
@@ -56,3 +60,7 @@ class FeedbackView(CreateView):
         kwargs = super().get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
+
+    def post(self, request, *args, **kwargs):
+        debug_task.delay(2, y=6)
+        return super().post(request, *args, **kwargs)

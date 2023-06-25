@@ -41,7 +41,7 @@ class CartForm(forms.Form):
             if k.startswith('item_'):
                 index = k.split('_')[-1]
                 try:
-                    item = OrderItem.objects.select_for_update().get(
+                    item = OrderItem.objects.get(
                         id=self.cleaned_data[f'item_{index}']
                     )
                 except OrderItem.DoesNotExist:

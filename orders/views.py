@@ -95,17 +95,19 @@ class CartView(GetCurrentOrderMixin, FormView):
 
     #  метод, возвращающий контекст данных для
     #  передачи в шаблон.
-    #  Он добавляет объект order и связанные с ним
-    #  объекты order_items в контекст.
+    #  Он добавляет объект order и связанные с ним объекты order_items в контекст.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order = self.get_object()
+        # breakpoint()
+        # total_amount = order.get_total_amount() if order else 0
         cart_items_count = order.order_items.count() if order else 0
         context.update({
             'order': order,
             # 'order_items': order.order_items.all()
             'order_items': order.order_items.select_related('product').all(),
-            'cart_items_count': cart_items_count
+            'cart_items_count': cart_items_count,
+            # 'total_amount': total_amount
         })
         return context
 
@@ -125,16 +127,14 @@ class CartView(GetCurrentOrderMixin, FormView):
         return super().form_valid(form)
 
 
-#  представление, обрабатывающее действия в корзине,
-#  такие как добавление товара,
+#  представление, обрабатывающее действия в корзине, такие как добавление товара,
 #  удаление товара, очистка корзины и оплата.
 #  Оно также наследуется от GetCurrentOrderMixin и RedirectView
 class CartActionView(GetCurrentOrderMixin, RedirectView):
     url = reverse_lazy('products')
 
     #  метод-хук, применяющий декоратор login_required
-    #  для требования аутентификации пользователя перед доступом
-    #  к представлению
+    #  для требования аутентификации пользователя перед доступом к представлению
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)

@@ -65,7 +65,8 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>Total:</td>
+                        <td>Total :</td>
+
                         <td>{{ order.total_amount }}</td>
                     </tr>
                     </tbody>
@@ -74,7 +75,7 @@
                         {#                        <td></td>#}
                         {% if not order.discount %}
                             <td><label for="id_discount">
-                                {% translate 'Have a discount code? Please enter here.' %}
+                                Have a discount code? Please enter here.
                             </label></td>
                             <td><input class="form-control" id="id_discount"
                                        type="text"
@@ -82,7 +83,7 @@
 
                         {% else %}
                             <td colspan="2">
-                                {% translate 'You already applied discount.' %}
+                                {% You already applied discount. %}
                             </td>
                         {% endif %}
                         <td><input type="submit" class="btn btn-primary"

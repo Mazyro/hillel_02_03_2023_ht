@@ -3,11 +3,12 @@ from django.dispatch import receiver
 from orders.models import Order
 
 
-@receiver(post_save, sender=Order)
-def set_order_price(sender, instance, **kwargs):
-    # breakpoint()
-    total_amount = instance.get_total_amount()
-    Order.objects.filter(id=instance.id).update(total_amount=total_amount)
+# not needed due to external signals from DjangoLifeCircle
+# @receiver(post_save, sender=Order)
+# def set_order_price(sender, instance, **kwargs):
+#     # breakpoint()
+#     total_amount = instance.get_total_amount()
+#     Order.objects.filter(id=instance.id).update(total_amount=total_amount)
 
 
 # def order_item_changed(sender, instance, **kwargs):
