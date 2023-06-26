@@ -1,6 +1,6 @@
-from django.db.models.signals import post_save  # , m2m_changed
-from django.dispatch import receiver
-from orders.models import Order
+# from django.db.models.signals import post_save  # , m2m_changed
+# from django.dispatch import receiver
+# from orders.models import Order
 
 
 # not needed due to external signals from DjangoLifeCircle

@@ -7,7 +7,7 @@ from feedbacks.models import Feedback
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from time import sleep
+# from time import sleep
 
 from project.celery import debug_task
 
@@ -42,9 +42,18 @@ class FeedbackList(UserPassesTestMixin, ListView):
         if not self.test_func():
             # Если пользователь суперпользователь, генерируем исключение
             raise Exception('Тестовое исключение')
-
         # Если пользователь не суперпользователь, вызываем супер-метод
         return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        debug_task.apply_async((2, 6), retry=True, retry_policy={
+            'max_retries': 3,
+            # 'interval_start': 0,
+            # 'interval_step': 0.2,
+            # 'interval_max': 0.2,
+        })
+        # debug_task.delay()
+        return super().get(request, *args, **kwargs)
 
 
 class FeedbackView(CreateView):
@@ -60,7 +69,3 @@ class FeedbackView(CreateView):
         kwargs = super().get_form_kwargs()
         kwargs.update({'user': self.request.user})
         return kwargs
-
-    def post(self, request, *args, **kwargs):
-        debug_task.delay(2, y=6)
-        return super().post(request, *args, **kwargs)
