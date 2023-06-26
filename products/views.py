@@ -23,9 +23,9 @@ import weasyprint
 import csv
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView  # , DetailView
 from products.forms import ProductModelForm, ImportCSVForm
-from products.models import Product
+from products.models import Product, FavouriteProduct
 
 from django.http import HttpResponse
 
@@ -34,6 +34,7 @@ from django.template.loader import render_to_string  # get_template,
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponseRedirect
 
 
 class ProductsView(View):
@@ -141,3 +142,23 @@ class ImportCSV(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+class AddOrRemoveFavoriteProduct(View):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        product_id = request.POST.get('product_id')
+        try:
+            product = Product.objects.get(id=product_id)
+            favourite, created = FavouriteProduct.objects.get_or_create(
+                product=product,
+                user=request.user
+            )
+            if not created:
+                favourite.delete()
+        except Product.DoesNotExist:
+            pass
+        return HttpResponseRedirect(reverse_lazy('products'))

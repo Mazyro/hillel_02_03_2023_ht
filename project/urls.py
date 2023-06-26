@@ -21,6 +21,7 @@ from feedbacks.urls import urlpatterns as feedbacks_urlpatterns
 from accounts.urls import urlpatterns as accounts_urlpatterns
 from main.urls import urlpatterns as main_urlpatterns
 from django.conf import settings
+from favourites.urls import urlpatterns as favourites_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +29,8 @@ urlpatterns = [
     path('orders/', include(orders_urlpatterns)),
     path('feedbacks/', include(feedbacks_urlpatterns)),
     path('accounts/', include(accounts_urlpatterns)),
-    path('', include(main_urlpatterns))
+    path('', include(main_urlpatterns)),
+    path('favourites/', include(favourites_urlpatterns)),
 ]
 
 

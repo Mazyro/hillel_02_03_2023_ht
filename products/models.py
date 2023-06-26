@@ -4,6 +4,14 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from project.mixins.models import PKMixin
 
+from django.contrib.auth import get_user_model
+
+from model_utils import Choices
+from model_utils.fields import StatusField
+from model_utils.models import StatusModel
+
+User = get_user_model()
+
 
 def upload_to(instance, filename):
     _name, extension = path.splitext(filename)
@@ -56,3 +64,17 @@ class Product(PKMixin):
 
     def __str__(self):
         return f"{self.name} - {self.price}"
+
+
+class FavouriteProduct(StatusModel):
+    STATUS = Choices('active', 'inactive')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    status = StatusField(default=STATUS.active)
+
+    class Meta:
+        verbose_name = 'Favourite Product'
+        verbose_name_plural = 'Favourite Products'
+
+    def __str__(self):
+        return f'{self.user.username} - {self.product.name}'
