@@ -32,27 +32,28 @@
                     {% if favourite.product.is_favourite %}
                         <p>This product is in your favourites.</p>
                     {% else %}
+                        <br>
                        <form method="post" action="{% url 'add_to_favourite' favourite.product.id %}">
                         {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ favourite.product.id }}">
-                            <input type="submit" value="Add to Favourite" class="btn btn-primary w-100">
+                            <input type="submit" value="Remove from Favourite" class="btn btn-danger w-100">
                         </form>
                     {% endif %}
                 {% else %}
                     <p><a href="{% url 'login' %}">Login</a> to add this product to your favourites.</p>
                 {% endif %}
             </div>
-                {% if favourite.product.products.exists %}
-                    <p class="p-3">Including</p>
-                    {% for sub in favourite.product.products.iterator %}
-                        <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
-                            <p class="product-name">{{ sub.name }}</p>
-                            <figure class="text-center d-inline">
-                                <img src="{{ sub.image.url }}" class="product-img p-3" alt="{{ favourite.product.name }}">
-                            </figure>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+            {% if favourite.product.products.exists %}
+                <p class="p-3">Including</p>
+                {% for sub in favourite.product.products.iterator %}
+                    <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
+                        <p class="product-name">{{ sub.name }}</p>
+                        <figure class="text-center d-inline">
+                            <img src="{{ sub.image.url }}" class="product-img p-3" alt="{{ favourite.product.name }}">
+                        </figure>
+                    </div>
+                {% endfor %}
+            {% endif %}
 
         </div>
     </div>

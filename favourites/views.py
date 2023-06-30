@@ -4,12 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
-from favourites.models import FavouriteProduct
-# from products.models import Product
+import products
 
 
 class FavouriteProductList(ListView):
-    model = FavouriteProduct
+    model = products.models.FavouriteProduct
+
     template_name = 'favourites/index.html'
 
     @method_decorator(login_required)

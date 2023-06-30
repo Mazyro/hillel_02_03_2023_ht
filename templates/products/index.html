@@ -4,86 +4,86 @@
 <title>{% block title %}Products{% endblock title %}</title>
 
 {% block content %}
- <a class="nav-link"
-     href="{% if user.is_authenticated %}{% url 'export_products_to_csv' %}{% else %}{% endif %}">
+<a class="nav-link"
+   href="{% if user.is_authenticated %}{% url 'export_products_to_csv' %}{% else %}{% endif %}">
     {% if user.is_authenticated %}Экспорт в CSV{% else %}{% endif %}
-  </a>
+</a>
 
- <a class="nav-link"
-     href="{% url 'export_products_to_pdf' %}">
-     Экспорт в PDF
-  </a>
+<a class="nav-link"
+   href="{% url 'export_products_to_pdf' %}">
+    Экспорт в PDF
+</a>
 
- <a class="nav-link"
-     href="{% if user.is_superuser %}
+<a class="nav-link"
+   href="{% if user.is_superuser %}
      {% url 'products_from_csv' %}
      {% endif %}
      ">
     {% if user.is_superuser %}Импорт из CSV{% else %}{% endif %}
 
-  </a>
+</a>
 
 
-  {% for product in products %}
-    <div class="col-12 {% if product.sub_products.exists %}col-lg-6{% else %}col-lg-3{% endif %} mt-3 mt-lg-5">
-        <div class="card">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" class="product-img p-3" alt="{{ product.name }}">
-            {% else %}
-                <img src="{% static 'images/pngwing.com.png' %}" class="product-img p-3" alt="{{ product.name }}">
+{% for product in products %}
+<div class="col-12 {% if product.sub_products.exists %}col-lg-6{% else %}col-lg-3{% endif %} mt-3 mt-lg-5">
+    <div class="card">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" class="product-img p-3" alt="{{ product.name }}">
+        {% else %}
+        <img src="{% static 'images/pngwing.com.png' %}" class="product-img p-3" alt="{{ product.name }}">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }} {{product.sku}}</h5>
+            {% for category in product.categories.iterator %}
+            <span class="text-success"> {{ category.name }} </span>
+            {% endfor %}
+            <span class="price-value"><p class="card-text">{{ product.price }} UAH</p></span>
+            <p class="card-text">{{ product.description|truncatewords:"12" }}</p>
+            <form method="post" action="{% url 'cart_action' 'add' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="submit" value="В корзину" class="btn btn-primary w-100">
+            </form>
+            {% if user.is_authenticated %}
+
+            {% if product.sku in favourite_skus %}
+            <br>
+            <p>This product is in your favourites.</p>
+            {% else%}
+            <form method="post" action="{% url 'add_to_favourite' product.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="submit" value="Add to Favourite" class="btn btn-warning w-100">
+            </form>
             {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                {% for category in product.categories.iterator %}
-                    <span class="text-success"> {{ category.name }} </span>
-                {% endfor %}
-                <span class="price-value"><p class="card-text">{{ product.price }} UAH</p></span>
-                <p class="card-text">{{ product.description|truncatewords:"12" }}</p>
-                <form method="post" action="{% url 'cart_action' 'add' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ product.id }}">
-                    <input type="submit" value="В корзину" class="btn btn-primary w-100">
-                </form>
-                {% if user.is_authenticated %}
-                    {% if product.is_favourite %}
-                        <p>This product is in your favourites.</p>
-                    {% else %}
-                       <form method="post" action="{% url 'add_to_favourite' product.id %}">
-                        {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                            <input type="submit" value="Add to Favourite" class="btn btn-primary w-100">
-                        </form>
-                    {% endif %}
-                {% else %}
-                    <p><a href="{% url 'login' %}">Login</a> to add this product to your favourites.</p>
-                {% endif %}
-            </div>
-            {% if product.products.exists %}
-                <p class="p-3">Including</p>
-                {% for sub in product.products.iterator %}
-                    <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
-                        <p class="product-name">{{ sub.name }}</p>
-                        <figure class="text-center d-inline">
-                            <img src="{{ sub.image.url }}" class="product-img p-3" alt="{{ product.name }}">
-                        </figure>
-                    </div>
-                {% endfor %}
+
+            {% else %}
+            <p><a href="{% url 'login' %}">Login</a> to add this product to your favourites.</p>
             {% endif %}
         </div>
+        {% if product.products.exists %}
+        <p class="p-3">Including</p>
+        {% for sub in product.products.iterator %}
+        <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
+            <p class="product-name">{{ sub.name }}</p>
+            <figure class="text-center d-inline">
+                <img src="{{ sub.image.url }}" class="product-img p-3" alt="{{ product.name }}">
+            </figure>
+        </div>
+        {% endfor %}
+        {% endif %}
     </div>
+</div>
+{% endfor %}
 
-
-
-  {% endfor %}
-
-  <div>
+<div>
     <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {% include 'parts/form.html' with form=form %}
-      <input type="submit" value="Save">
-      {% for name, error in form.errors.items %}
+        {% csrf_token %}
+        {% include 'parts/form.html' with form=form %}
+        <input type="submit" value="Save">
+        {% for name, error in form.errors.items %}
         <p> {{ error }}</p>
-      {% endfor %}
+        {% endfor %}
     </form>
-  </div>
+</div>
 {% endblock content %}

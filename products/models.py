@@ -77,4 +77,7 @@ class FavouriteProduct(StatusModel):
         verbose_name_plural = 'Favourite Products'
 
     def __str__(self):
-        return f'{self.user.username} - {self.product.name}'
+        return f'{self.product.sku}'
+
+    def is_favourite(self):
+        return self.status

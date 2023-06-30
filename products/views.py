@@ -23,7 +23,7 @@ import weasyprint
 import csv
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, FormView  # , DetailView
+from django.views.generic import TemplateView, FormView, DetailView
 from products.forms import ProductModelForm, ImportCSVForm
 from products.models import Product, FavouriteProduct
 
@@ -39,12 +39,19 @@ from django.http import HttpResponseRedirect
 
 class ProductsView(View):
     def get(self, request, *args, **kwargs):
+
         form = ProductModelForm()
         # exclude accessories
         products_list = Product.objects.exclude(categories__name='Accessories')
+        favourite_products = FavouriteProduct.objects.filter(user=request.user)
+        favourite_skus = favourite_products.values_list(
+            'product__sku', flat=True
+        )
+        # breakpoint()
         return render(request, 'products/index.html', context={
             'products': products_list,
             'form': form,
+            'favourite_skus': favourite_skus,
             # 'key': request.key, для теста мидлвары TrackingMiddleware
         })
 
@@ -57,7 +64,6 @@ class ProductsView(View):
         return render(request, 'products/index.html', context={
             'products': products_list,
             'form': form,
-
         })
 
 
@@ -144,21 +150,61 @@ class ImportCSV(FormView):
         return super().form_valid(form)
 
 
-class AddOrRemoveFavoriteProduct(View):
+# class AddOrRemoveFavoriteProduct(View):
+#     @method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super().dispatch(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         product_id = request.POST.get('product_id')
+#         try:
+#             product = Product.objects.get(id=product_id)
+#             favourite, created = FavouriteProduct.objects.get_or_create(
+#                 product=product,
+#                 user=request.user
+#             )
+#             if not created:
+#                 favourite.delete()
+#         except Product.DoesNotExist:
+#             pass
+#         return HttpResponseRedirect(reverse_lazy('products'))
+
+class AddOrRemoveFavoriteProduct(DetailView):
+    model = Product
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        product_id = request.POST.get('product_id')
-        try:
-            product = Product.objects.get(id=product_id)
-            favourite, created = FavouriteProduct.objects.get_or_create(
-                product=product,
-                user=request.user
-            )
-            if not created:
-                favourite.delete()
-        except Product.DoesNotExist:
-            pass
-        return HttpResponseRedirect(reverse_lazy('products'))
+        self.object = self.get_object()
+        # Получаем URL-шаблоны
+        products_url = reverse_lazy('products')
+        favourites_url = reverse_lazy('favourites')
+        # Когда переменные указываются через запятую, как в
+        # данном случае `favourite,
+        # created = FavouriteProduct.objects.get_or_create(...)`,
+        # это называется
+        # множественным присваиванием (multiple assignment).
+        # В данном случае, метод `get_or_create()` возвращает
+        # два значения: объект `FavouriteProduct` (связанный с
+        # указанным товаром и пользователем) и флаг `created`,
+        # указывающий, был ли создан новый объект.
+        # Множественное присваивание позволяет сразу
+        # присвоить эти два значения разным переменным
+        # `favourite` и `created`.
+        # Таким образом, `favourite`
+        # будет содержать объект `FavouriteProduct`,
+        # а `created` будет содержать флаг, указывающий,
+        # был ли создан новый объект (`True` или `False`).
+        # Это удобный способ получить и использовать несколько
+        # значений, возвращаемых функцией или методом, в одной строке кода.
+        favourite, created = FavouriteProduct.objects.get_or_create(
+            product=self.object,
+            user=request.user
+        )
+
+        if not created:
+            favourite.delete()
+            return HttpResponseRedirect(favourites_url)
+        return HttpResponseRedirect(products_url)
