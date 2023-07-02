@@ -37,7 +37,7 @@
             {% for category in product.categories.iterator %}
             <span class="text-success"> {{ category.name }} </span>
             {% endfor %}
-            <span class="price-value"><p class="card-text">{{ product.price }} UAH</p></span>
+            <span class="price-value"><p class="card-text">{{ product.price_uah }} UAH</p></span>
             <p class="card-text">{{ product.description|truncatewords:"12" }}</p>
             <form method="post" action="{% url 'cart_action' 'add' %}">
                 {% csrf_token %}
@@ -56,7 +56,6 @@
                 <input type="submit" value="Add to Favourite" class="btn btn-warning w-100">
             </form>
             {% endif %}
-
             {% else %}
             <p><a href="{% url 'login' %}">Login</a> to add this product to your favourites.</p>
             {% endif %}

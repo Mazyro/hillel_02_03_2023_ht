@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import environ
 from pathlib import Path
 from django.urls import reverse_lazy
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     # external packages
     'widget_tweaks',
     'django_celery_results',
+    'django_extensions',
+    'django_celery_beat',
     # internal packages
     'products',
     'orders',
@@ -55,6 +58,7 @@ INSTALLED_APPS = [
     'main',
     'tracking',
     'favourites',
+    'currencies'
 ]
 
 MIDDLEWARE = [
@@ -156,3 +160,18 @@ CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = 'django-db'
 
 CELERY_TASK_ALWAYS_EAGER = False
+
+CELERY_BEAT_SCHEDULE = {
+    'Get currencies': {
+        'task': 'currencies.tasks.get_currencies_task',
+        'schedule': crontab(hour='07', minute='00'),
+    },
+    'Set currencies': {
+        'task': 'currencies.tasks.set_currencies_task',
+        'schedule': crontab(hour='07', minute='05'),
+    },
+    'Del currencies': {
+        'task': 'currencies.tasks.delete_old_currencies',
+        'schedule': crontab(hour='06', minute='55'),
+    }
+}

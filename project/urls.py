@@ -22,6 +22,7 @@ from accounts.urls import urlpatterns as accounts_urlpatterns
 from main.urls import urlpatterns as main_urlpatterns
 from django.conf import settings
 from favourites.urls import urlpatterns as favourites_urlpatterns
+# from currencies.urls import urlpatterns as currencies_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,8 @@ urlpatterns = [
     path('accounts/', include(accounts_urlpatterns)),
     path('', include(main_urlpatterns)),
     path('favourites/', include(favourites_urlpatterns)),
+    path('favourites/', include(favourites_urlpatterns)),
+    # path('currencies/', include(currencies_urlpatterns)),
 ]
 
 

@@ -1,4 +1,4 @@
-from django.db.models import IntegerChoices
+from django.db.models import IntegerChoices, TextChoices
 
 
 class DiscountTypes(IntegerChoices):
@@ -11,3 +11,9 @@ class OrderStatus(IntegerChoices):
     CONFIRMED = 2, 'confirmed'
     SHIPPED = 3, 'shipped'
     DELIVERED = 4, 'delivered'
+
+
+class Currencies(TextChoices):
+    UAH = 'UAH', 'UAH'
+    USD = 'USD', 'USD'
+    EUR = 'EUR', 'EUR'

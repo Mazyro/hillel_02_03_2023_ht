@@ -19,6 +19,7 @@
 #         'products': products_list,
 #         'form': form,
 #     })
+
 import weasyprint
 import csv
 from django.shortcuts import render
@@ -39,7 +40,6 @@ from django.http import HttpResponseRedirect
 
 class ProductsView(View):
     def get(self, request, *args, **kwargs):
-
         form = ProductModelForm()
         # exclude accessories
         products_list = Product.objects.exclude(categories__name='Accessories')
@@ -125,11 +125,13 @@ class ExportToPdf(TemplateView):
         return response
 
 
-# класс наследуется от FormView, который предоставляет функциональность
-# для работы с формами.# Декораторы login_required и user_passes_test
-# используются для проверки аутентификации пользователя и его статуса
-# (должен быть сотрудником), чтобы разрешить доступ только
-# авторизованным сотрудникам.
+"""класс наследуется от FormView, который предоставляет функциональность
+для работы с формами.# Декораторы login_required и user_passes_test
+используются для проверки аутентификации пользователя и его статуса
+(должен быть сотрудником), чтобы разрешить доступ только
+авторизованным сотрудникам."""
+
+
 class ImportCSV(FormView):
     form_class = ImportCSVForm
     template_name = 'products/import_csv.html'
@@ -140,11 +142,11 @@ class ImportCSV(FormView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    # Метод form_valid вызывается, когда форма проходит валидацию,
-    # и в нем вызывается form.save() для сохранения данных из CSV
-    # файла в базе данных.Таким образом, код обрабатывает загрузку
-    # CSV файла с продуктами, проверяет их корректность и сохраняет
-    # в базе данных с помощью массовой операции bulk_create.
+    """Метод form_valid вызывается, когда форма проходит валидацию,
+    и в нем вызывается form.save() для сохранения данных из CSV
+    файла в базе данных.Таким образом, код обрабатывает загрузку
+    CSV файла с продуктами, проверяет их корректность и сохраняет
+    в базе данных с помощью массовой операции bulk_create."""
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
@@ -181,29 +183,29 @@ class AddOrRemoveFavoriteProduct(DetailView):
         # Получаем URL-шаблоны
         products_url = reverse_lazy('products')
         favourites_url = reverse_lazy('favourites')
-        # Когда переменные указываются через запятую, как в
-        # данном случае `favourite,
-        # created = FavouriteProduct.objects.get_or_create(...)`,
-        # это называется
-        # множественным присваиванием (multiple assignment).
-        # В данном случае, метод `get_or_create()` возвращает
-        # два значения: объект `FavouriteProduct` (связанный с
-        # указанным товаром и пользователем) и флаг `created`,
-        # указывающий, был ли создан новый объект.
-        # Множественное присваивание позволяет сразу
-        # присвоить эти два значения разным переменным
-        # `favourite` и `created`.
-        # Таким образом, `favourite`
-        # будет содержать объект `FavouriteProduct`,
-        # а `created` будет содержать флаг, указывающий,
-        # был ли создан новый объект (`True` или `False`).
-        # Это удобный способ получить и использовать несколько
-        # значений, возвращаемых функцией или методом, в одной строке кода.
+        """
+        Когда переменные указываются через запятую, как в
+        данном случае favourite, created =
+        FavouriteProduct.objects.get_or_create(...)`,
+        это называется множественным присваиванием (multiple assignment).
+        В данном случае, метод get_or_create() возвращает
+        два значения: объект FavouriteProduct (связанный с
+        указанным товаром и пользователем) и флаг `created`,
+        указывающий, был ли создан новый объект.
+        Множественное присваивание позволяет сразу
+        присвоить эти два значения разным переменным
+        `favourite` и `created`.  Таким образом, `favourite`
+        будет содержать объект `FavouriteProduct`,
+        а `created` будет содержать флаг, указывающий, был ли
+        создан новый объект (`True` или `False`).
+        Это удобный способ получить и использовать несколько
+        значений, возвращаемых функцией или методом,
+        в одной строке кода.
+        """
         favourite, created = FavouriteProduct.objects.get_or_create(
             product=self.object,
             user=request.user
         )
-
         if not created:
             favourite.delete()
             return HttpResponseRedirect(favourites_url)
