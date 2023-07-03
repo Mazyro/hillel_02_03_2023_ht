@@ -17,3 +17,11 @@ class Currencies(TextChoices):
     UAH = 'UAH', 'UAH'
     USD = 'USD', 'USD'
     EUR = 'EUR', 'EUR'
+
+
+class ProductCacheKeys(TextChoices):
+    PRODUCTS = 'products', 'Products all'
+
+
+class FeedbackCacheKeys(TextChoices):
+    FEEDBACKS = 'feedbacks', 'Feedbacks all'

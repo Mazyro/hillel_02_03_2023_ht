@@ -164,14 +164,30 @@ CELERY_TASK_ALWAYS_EAGER = False
 CELERY_BEAT_SCHEDULE = {
     'Get currencies': {
         'task': 'currencies.tasks.get_currencies_task',
-        'schedule': crontab(hour='*', minute='*'),
+        'schedule': crontab(hour='08', minute='00'),
     },
     'Set currencies': {
         'task': 'currencies.tasks.set_currencies_task',
-        'schedule': crontab(hour='*', minute='*'),
+        'schedule': crontab(hour='08', minute='05'),
     },
     'Del currencies': {
         'task': 'currencies.tasks.delete_old_currencies',
         'schedule': crontab(hour='*', minute='*'),
+    }
+}
+#
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#         # "TIMEOUT": 3600,
+#     }
+# }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+        "TIMEOUT": 3600,
     }
 }

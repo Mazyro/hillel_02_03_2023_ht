@@ -1,10 +1,6 @@
-# from django.shortcuts import render
-#
+# from django.shortcuts import render#
 # from products.forms import ProductModelForm
 # from products.models import Product
-
-
-# Create your views here.
 
 # rewritte in OOP
 # def products(request, *args, **kwargs):
@@ -22,49 +18,78 @@
 
 import weasyprint
 import csv
-from django.shortcuts import render
-from django.views import View
-from django.views.generic import TemplateView, FormView, DetailView
-from products.forms import ProductModelForm, ImportCSVForm
+# from django.shortcuts import render
+# from django.views import View
+from django.views.generic import TemplateView, FormView, DetailView, ListView
+from products.forms import ImportCSVForm
 from products.models import Product, FavouriteProduct
-
 from django.http import HttpResponse
-
 from django.template.loader import render_to_string  # get_template,
-
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
+from django.core.cache import cache
 
 
-class ProductsView(View):
-    def get(self, request, *args, **kwargs):
-        form = ProductModelForm()
-        # exclude accessories
-        products_list = Product.objects.exclude(categories__name='Accessories')
-        favourite_products = FavouriteProduct.objects.filter(user=request.user)
-        favourite_skus = favourite_products.values_list(
-            'product__sku', flat=True
-        )
-        # breakpoint()
-        return render(request, 'products/index.html', context={
-            'products': products_list,
-            'form': form,
-            'favourite_skus': favourite_skus,
-            # 'key': request.key, для теста мидлвары TrackingMiddleware
-        })
+class ProductsView(ListView):
+    # def get(self, request, *args, **kwargs):
+    #     form = ProductModelForm()
+    #     # exclude accessories
+    #     products_list = Product.objects.exclude(
+    #     categories__name='Accessories'
+    #     )
+    #     favourite_products = FavouriteProduct.objects.filter(
+    #     user=request.user
+    #     )
+    #     favourite_skus = favourite_products.values_list(
+    #         'product__sku', flat=True
+    #     )
+    #     # breakpoint()
+    #     return render(request, 'products/index.html', context={
+    #         'products': products_list,
+    #         'form': form,
+    #         'favourite_skus': favourite_skus,
+    #         # 'key': request.key, для теста мидлвары TrackingMiddleware
+    #     })
+    template_name = 'products/index.html'
+    context_object_name = 'products'
+    model = Product
 
-    def post(self, request, *args, **kwargs):
-        form = ProductModelForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-        # exclude accessories
-        products_list = Product.objects.exclude(categories__name='Accessories')
-        return render(request, 'products/index.html', context={
-            'products': products_list,
-            'form': form,
-        })
+    def get_queryset(self):
+        queryset = cache.get('products')
+
+        if not queryset:
+            print('TO CASH')
+            queryset = Product.objects.all()
+            cache.set('products', queryset)
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        # favourite = FavouriteProduct.objects.filter(
+        #     product=OuterRef('pk'),
+        #     user=self.request.user
+        # )
+        # queryset = queryset.annotate(
+        #     is_favourite=Exists(favourite)
+        # )
+        return queryset
+
+    # todo transfer to another place
+    # def post(self, request, *args, **kwargs):
+    #     form = ProductModelForm(data=request.POST, files=request.FILES)
+    #     if form.is_valid():
+    #         form.save()
+    #     # exclude accessories
+    #     products_list = Product.objects.exclude(
+    #     categories__name='Accessories'
+    #     )
+    #     return render(request, 'products/index.html', context={
+    #         'products': products_list,
+    #         'form': form,
+    #     })
 
 
 def export_csv(request, *args, **kwargs):
