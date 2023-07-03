@@ -77,12 +77,27 @@ class ProductDetail(DetailView):
                 "No %(verbose_name)s found matching the query"
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
-            # Check if the product is a favorite for the current user
+
+        # Check if the product is a favorite for the current user
+        """
+        We use the FavouriteProduct model and perform a
+        filter query to retrieve any favorite product
+        records that match the product field with
+        obj and the user field with self.request.user.
+        """
         if self.request.user.is_authenticated:
+            # The exists() method is called on the queryset to determine
+            # if any matching records exist.
             favourite = FavouriteProduct.objects.filter(
                 product=obj,
                 user=self.request.user
             ).exists()
+            """
+                 By setting obj.is_favourite = favourite, we are adding
+                 an is_favourite attribute to the obj object dynamically
+                 and assigning it the value of favourite. This allows
+                 us to access the favorite status of the product in the template
+            """
             obj.is_favourite = favourite
         return obj
 
