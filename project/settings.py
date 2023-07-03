@@ -164,14 +164,14 @@ CELERY_TASK_ALWAYS_EAGER = False
 CELERY_BEAT_SCHEDULE = {
     'Get currencies': {
         'task': 'currencies.tasks.get_currencies_task',
-        'schedule': crontab(hour='07', minute='00'),
+        'schedule': crontab(hour='05', minute='55'),
     },
     'Set currencies': {
         'task': 'currencies.tasks.set_currencies_task',
-        'schedule': crontab(hour='07', minute='05'),
+        'schedule': crontab(hour='06', minute='00'),
     },
     'Del currencies': {
         'task': 'currencies.tasks.delete_old_currencies',
-        'schedule': crontab(hour='06', minute='55'),
+        'schedule': crontab(hour='*', minute='*'),
     }
 }

@@ -14,7 +14,7 @@ class NationBank(APIBaseClient):
     "cc":"EUR","exchangedate":"04.05.2023"} ... ]
     """
 
-    def _prepare_data(self):
+    def prepare_data(self):
         self._request(
             'get',
             params={

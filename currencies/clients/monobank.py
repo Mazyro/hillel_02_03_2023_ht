@@ -12,7 +12,7 @@ class MonoBank(APIBaseClient):
     [{'code': 'EUR', buy":"40.45","sale":"41.6008"},    ...
     ]
     """
-    def _prepare_data(self):
+    def prepare_data(self):
         self._request('get')
         self.results = []
         if self.response:

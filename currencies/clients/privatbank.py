@@ -5,7 +5,7 @@ from project.api_base_client import APIBaseClient
 class PrivatBank(APIBaseClient):
     base_url = 'https://api.privatbank.ua/p24api/pubinfo'
 
-    def _prepare_data(self) -> list:
+    def prepare_data(self) -> list:
         """
         [
             {"ccy":"EUR","base_ccy":"UAH","buy":"39.69520","sale":"41.32231"},
@@ -34,7 +34,7 @@ class PrivatBank(APIBaseClient):
 
     def save(self):
         results = []
-        for i in self._prepare_data():
+        for i in self.prepare_data():
             results.append(
                 CurrencyHistory(
                     **i  # список словарей
@@ -42,7 +42,6 @@ class PrivatBank(APIBaseClient):
             )
         if results:
             CurrencyHistory.objects.bulk_create(results)  # наполнили модель
-        print('ok')
 
 
 """Импровизированный синглтон"""
