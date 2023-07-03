@@ -4,6 +4,7 @@ from project.api_base_client import APIBaseClient
 
 class PrivatBank(APIBaseClient):
     base_url = 'https://api.privatbank.ua/p24api/pubinfo'
+    results = []
 
     def prepare_data(self) -> list:
         """
@@ -14,6 +15,7 @@ class PrivatBank(APIBaseClient):
         return: dict
         [{"code": "USD", "buy":"39.69520","sale":"41.32231"},]
         """
+
         self._request(
             'get',
             params={
@@ -22,15 +24,15 @@ class PrivatBank(APIBaseClient):
                 'coursid': 5,
             }
         )
-        results = []
+        self.results = []
         if self.response:
             for i in self.response.json():
-                results.append({
+                self.results.append({
                     'code': i['ccy'],
                     'buy': i['buy'],
                     'sale': i['sale'],
                 })
-        return results
+        # return results
 
     def save(self):
         results = []
