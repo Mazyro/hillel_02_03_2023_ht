@@ -34,6 +34,8 @@ from django.core.cache import cache
 
 from project.model_choices import ProductCacheKeys
 
+from django.db.models import OuterRef, Exists
+
 
 class ProductDetail(DetailView):
     # template_name = 'products/product_detail.html' no need
@@ -64,6 +66,7 @@ class ProductDetail(DetailView):
 
         try:
             # Get the single item from the filtered queryset
+
             # составной ключ f"{ProductCacheKeys.PRODUCTS}_{pk}"
             obj = cache.get_or_set(
                 f"{ProductCacheKeys.PRODUCTS}_{pk}", queryset.get()
@@ -74,6 +77,13 @@ class ProductDetail(DetailView):
                 "No %(verbose_name)s found matching the query"
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
+            # Check if the product is a favorite for the current user
+        if self.request.user.is_authenticated:
+            favourite = FavouriteProduct.objects.filter(
+                product=obj,
+                user=self.request.user
+            ).exists()
+            obj.is_favourite = favourite
         return obj
 
 
@@ -107,20 +117,21 @@ class ProductsView(ListView):
 
         if not queryset:
             print('TO CASH')
-            queryset = Product.objects.all()
+            # exclude accessories
+            queryset = Product.objects.exclude(categories__name='Accessories')
             cache.set(ProductCacheKeys.PRODUCTS, queryset)
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
-        # favourite = FavouriteProduct.objects.filter(
-        #     product=OuterRef('pk'),
-        #     user=self.request.user
-        # )
-        # queryset = queryset.annotate(
-        #     is_favourite=Exists(favourite)
-        # )
+        favourite = FavouriteProduct.objects.filter(
+            product=OuterRef('pk'),
+            user=self.request.user
+        )
+        queryset = queryset.annotate(
+            is_favourite=Exists(favourite)
+        )
         return queryset
 
     # todo transfer to another place

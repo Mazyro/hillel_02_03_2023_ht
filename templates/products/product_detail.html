@@ -25,7 +25,7 @@
             </form>
             {% if user.is_authenticated %}
 
-            {% if product.sku in favourite_skus %}
+            {% if product.is_favourite %}
             <br>
             <p>This product is in your favourites.</p>
             {% else%}
