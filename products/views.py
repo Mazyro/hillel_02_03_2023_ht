@@ -16,6 +16,7 @@
 #         'form': form,
 #     })
 
+
 import weasyprint
 import csv
 # from django.shortcuts import render
@@ -28,8 +29,52 @@ from django.template.loader import render_to_string  # get_template,
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.cache import cache
+
+from project.model_choices import ProductCacheKeys
+
+
+class ProductDetail(DetailView):
+    # template_name = 'products/product_detail.html' no need
+    context_object_name = 'product'
+    model = Product
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # Next, try looking up by slug.
+        if slug is not None and (pk is None or self.query_pk_and_slug):
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+
+        # If none of those are defined, it's an error.
+        if pk is None and slug is None:
+            raise AttributeError(
+                "Generic detail view %s must be called with either an object "
+                "pk or a slug in the URLconf." % self.__class__.__name__
+            )
+
+        try:
+            # Get the single item from the filtered queryset
+            # составной ключ f"{ProductCacheKeys.PRODUCTS}_{pk}"
+            obj = cache.get_or_set(
+                f"{ProductCacheKeys.PRODUCTS}_{pk}", queryset.get()
+            )
+
+        except queryset.model.DoesNotExist:
+            raise Http404(
+                "No %(verbose_name)s found matching the query"
+                % {"verbose_name": queryset.model._meta.verbose_name}
+            )
+        return obj
 
 
 class ProductsView(ListView):
@@ -52,17 +97,18 @@ class ProductsView(ListView):
     #         'favourite_skus': favourite_skus,
     #         # 'key': request.key, для теста мидлвары TrackingMiddleware
     #     })
-    template_name = 'products/index.html'
+
+    # template_name = 'products/product_list.html'  no need
     context_object_name = 'products'
     model = Product
 
     def get_queryset(self):
-        queryset = cache.get('products')
+        queryset = cache.get(ProductCacheKeys.PRODUCTS)
 
         if not queryset:
             print('TO CASH')
             queryset = Product.objects.all()
-            cache.set('products', queryset)
+            cache.set(ProductCacheKeys.PRODUCTS, queryset)
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):

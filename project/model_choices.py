@@ -19,9 +19,11 @@ class Currencies(TextChoices):
     EUR = 'EUR', 'EUR'
 
 
+# for further use in set/get cache
 class ProductCacheKeys(TextChoices):
     PRODUCTS = 'products', 'Products all'
 
 
+# for further use in set/get cache
 class FeedbackCacheKeys(TextChoices):
     FEEDBACKS = 'feedbacks', 'Feedbacks all'

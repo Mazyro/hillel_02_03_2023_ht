@@ -4,7 +4,8 @@ from django.urls.converters import UUIDConverter, StringConverter
 from django.urls import path
 
 from products.views import ProductsView, export_csv, \
-    ExportToPdf, ImportCSV, export_csv_tameplate, AddOrRemoveFavoriteProduct
+    ExportToPdf, ImportCSV, export_csv_tameplate, \
+    AddOrRemoveFavoriteProduct, ProductDetail
 
 
 class UUIDConverter(StringConverter):  # noqa
@@ -12,9 +13,8 @@ class UUIDConverter(StringConverter):  # noqa
 
 
 urlpatterns = [
-    path('products/',
-         ProductsView.as_view(),
-         name='products'),
+    path('', ProductsView.as_view(), name='products'),
+    path('<uuid:pk>', ProductDetail.as_view(), name='product'),
     path('products/export-csv/',
          export_csv,
          name='export_products_to_csv'),

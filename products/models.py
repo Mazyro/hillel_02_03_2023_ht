@@ -8,10 +8,12 @@ from django.contrib.auth import get_user_model
 from model_utils import Choices
 from model_utils.fields import StatusField
 from model_utils.models import StatusModel
-from project.model_choices import Currencies
+from project.model_choices import Currencies, ProductCacheKeys
 from currencies.models import get_euro_rate, get_usd_rate
 from django_lifecycle import LifecycleModelMixin, hook, \
     AFTER_UPDATE, AFTER_CREATE
+
+from django.core.cache import cache
 
 User = get_user_model()
 
@@ -87,6 +89,11 @@ class Product(LifecycleModelMixin, PKMixin):
         elif self.currency == 'USD':
             price_uah = self.price * get_usd_rate()
         return price_uah
+
+    @hook(AFTER_CREATE)
+    @hook(AFTER_UPDATE)
+    def after_signal(self):
+        cache.delete(ProductCacheKeys.PRODUCTS)
 
 
 class FavouriteProduct(StatusModel):
