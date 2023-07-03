@@ -23,7 +23,7 @@ class APIBaseClient():
             logger.error(err)
 
     #  этот метод должен быть в классе, от которого наследумся
-    def _prepare_data(self):
+    def prepare_data(self):
         raise NotImplementedError
 
     # метод должен только парсить, отказались
