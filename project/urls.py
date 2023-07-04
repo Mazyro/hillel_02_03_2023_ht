@@ -23,6 +23,8 @@ from main.urls import urlpatterns as main_urlpatterns
 from django.conf import settings
 from favourites.urls import urlpatterns as favourites_urlpatterns
 # from currencies.urls import urlpatterns as currencies_urlpatterns
+from django.conf.urls.i18n import i18n_patterns
+from django.views.i18n import set_language
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +36,10 @@ urlpatterns = [
     path('favourites/', include(favourites_urlpatterns)),
     path('favourites/', include(favourites_urlpatterns)),
     # path('currencies/', include(currencies_urlpatterns)),
+    path('set-language/', set_language, name='set_language'),
 ]
+
+urlpatterns = i18n_patterns(*urlpatterns)
 
 
 if settings.DEBUG:

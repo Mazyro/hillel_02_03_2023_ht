@@ -96,7 +96,8 @@ class ProductDetail(DetailView):
                  By setting obj.is_favourite = favourite, we are adding
                  an is_favourite attribute to the obj object dynamically
                  and assigning it the value of favourite. This allows
-                 us to access the favorite status of the product in the template
+                 us to access the favorite status of the product in the
+                 template
             """
             obj.is_favourite = favourite
         return obj

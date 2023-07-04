@@ -14,6 +14,7 @@ import environ
 from pathlib import Path
 from django.urls import reverse_lazy
 from celery.schedules import crontab
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,6 +74,8 @@ MIDDLEWARE = [
     'project.middlewares.TrackingMiddleware',
     # Моя middleware для вывода стр что есть ошибка
     # 'project.middlewares.ErrorHandlingMiddleware',
+    # for traanslation
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -131,7 +134,17 @@ LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('uk', _('Ukrainian')),
+    ('en', _('English')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale'
+]
+
 
 TIME_ZONE = 'Europe/Kiev'
 

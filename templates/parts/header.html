@@ -1,6 +1,8 @@
 {% load static %}
+{% load i18n %}
 <header>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'main' %}">
       <img class="logo" src="{% static 'images/pngwing.com.png' %}" alt="logo">
@@ -9,42 +11,73 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'products' %}">Продукти</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'products' %}">{% translate 'Products' %}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link"
              href="{% if user.is_superuser %}{% url 'admin:index' %}{% else %}{% endif %}">
-            {% if user.is_superuser %}Admin panel{% else %}{% endif %}
+            {% if user.is_superuser %}{% translate 'Adminpanel' %}{% else %}{% endif %}
           </a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            {% translate 'Dropdown' %}
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-            <li><a class="dropdown-item" href="{% url 'registration' %}">Registration</a></li>
+            <li><a class="dropdown-item" href="{% url 'login' %}">{% translate 'Login' %}</a></li>
+            <li><a class="dropdown-item" href="{% url 'registration' %}">{% translate 'Registration' %}</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'feedbacks' %}">Feedbacks</a></li>
+            <li><a class="dropdown-item" href="{% url 'feedbacks' %}">{% translate 'Feedbacks' %}</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'favourites' %}">Favourites</a></li>
+            <li><a class="dropdown-item" href="{% url 'favourites' %}">{% translate 'Favourites' %}</a></li>
           </ul>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link disabled">{% if user.is_authenticated %}Привет, {{ user.username }}!
-          {% else %}Войдите, чтобы получить доступ к контенту.
+          <a class="nav-link disabled">{% if user.is_authenticated %}{% translate 'Hi,' %} {{ user.username }}!
+          {% else %}{% translate 'Sign in to access content' %}
           {% endif %}</a>
         </li>
+
       </ul>
          <ul>
             {% for currency in currency_rates %}
             <li>{{ currency.code }}: {{ currency.buy }}</li>
             {% endfor %}
         </ul>
+
+
+
       <ul class="navbar-nav me-right mb-2 mb-lg-0">
+          <li>
+                            <form action="{% url 'set_language' %}"
+                                  method="post" class="d-flex">
+                                {% csrf_token %}
+                                <input name="next" type="hidden"
+                                       value="{{ redirect_to }}">
+                                <select name="language" class="form-select">
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% get_language_info_list for LANGUAGES as languages %}
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}"
+                                                {% if language.code == LANGUAGE_CODE %}
+                                                selected{% endif %}>
+                                            {{ language.name_local }}
+                                            ({{ language.code }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <input type="submit" value="Go" class="btn btn-primary">
+                            </form>
+                        </li>
+
+
+
             <li class="ms-auto nav-item">
                 <a class="nav-link active" aria-current="page"
                    href="{% url 'cart' %}">

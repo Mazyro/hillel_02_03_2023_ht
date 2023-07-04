@@ -14,10 +14,11 @@ class CartForm(forms.Form):
         self.fields.update({k: forms.IntegerField() if k.startswith(
             'quantity') else forms.UUIDField() for k in self.data.keys() if
                             k.startswith(('quantity', 'item'))})
-
-    # проверяет, если введенный код скидки (discount) действителен,
-    # то есть существует запись Discount с таким кодом и является активной.
-    # Если код недействителен, вызывается исключение ValidationError.
+    """
+    проверяет, если введенный код скидки (discount) действителен,
+    то есть существует запись Discount с таким кодом и является активной.
+    Если код недействителен, вызывается исключение ValidationError.
+    """
     def clean_discount(self):
         if self.cleaned_data['discount']:
             try:
@@ -29,13 +30,14 @@ class CartForm(forms.Form):
             except (Discount.DoesNotExist, ValidationError):
                 raise ValidationError('Invalid discount code.')
             return discount
-
-    # Метод save сохраняет данные формы.
-    # Он обновляет количество товаров (quantity) в соответствии
-    # с данными формы и сохраняет их.
-    # Затем он обрабатывает код скидки (discount) и присваивает
-    # его полю discount объекта Order, если он существует.
-    # В конце метод возвращает экземпляр Order.
+    """
+    Метод save сохраняет данные формы.
+    Он обновляет количество товаров (quantity) в соответствии
+    с данными формы и сохраняет их.
+    Затем он обрабатывает код скидки (discount) и присваивает
+    его полю discount объекта Order, если он существует.
+    В конце метод возвращает экземпляр Order.
+    """
     def save(self):
         for k in self.cleaned_data.keys():
             if k.startswith('item_'):

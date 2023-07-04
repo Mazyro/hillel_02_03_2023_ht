@@ -13,7 +13,7 @@ from project.celery import app
 @app.task
 def delete_old_currencies():
     CurrencyHistory.objects.filter(
-        created_at__lt=timezone.now() - timedelta(minutes=5)
+        created_at__lt=timezone.now() - timedelta(minutes=120)
     ).delete()
 
 
