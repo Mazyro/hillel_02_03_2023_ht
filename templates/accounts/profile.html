@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <h2>{% translate "Title - Your Profile" %}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            <label for="id_first_name">{% translate "First Name" %}:</label>
+            <input type="text" id="id_first_name" name="first_name" required>
+        </div>
+
+        <div>
+            <label for="id_last_name">{% translate "Last Name" %}:</label>
+            <input type="text" id="id_last_name" name="last_name" required>
+        </div>
+
+        <div>
+            <label for="id_phone">{% translate "Phone Number" %}:</label>
+            <input type="text" id="id_phone" name="phone" required>
+            <span class="text-danger"> {% translate ' -- Phone number is needed to be verified' %} </span>
+        </div>
+
+        <div>
+            <label for="id_verification_code">{% trans "Verification Code" %}:</label>
+            <input type="text" id="id_verification_code" name="verification_code" required>
+        </div>
+
+        <button type="submit">{% trans "Submit" %}</button>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </form>
+{% endblock content %}

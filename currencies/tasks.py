@@ -1,8 +1,6 @@
 from datetime import timedelta
-
 from celery import shared_task
 from django.utils import timezone
-
 from currencies.clients.monobank import monobank_client
 from currencies.clients.nbu import nationbank_client
 from currencies.clients.privatbank import privatbank_client

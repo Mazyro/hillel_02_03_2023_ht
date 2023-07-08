@@ -1,16 +1,12 @@
-from django.urls import path, include
+from django.contrib.auth.views import LogoutView
+from django.urls import path  # , include
 
-from accounts.views import RegistrationView
-
-# from accounts.views import LoginView, LogoutView
+from accounts.views import RegistrationView, LoginView, ProfileView
 
 urlpatterns = [
-    # path('login/', LoginView.as_view(), name='login'),
-    # path('logout/', LogoutView.as_view(), name='logout'),
-
-    # we can use only this auth
-    # Это добавит все необходимые URL-адреса для аутентификации Django,
-    # такие как login, logout, password_change, password_reset и т.д.
-    path('', include('django.contrib.auth.urls')),
-    path('registration/', RegistrationView.as_view(), name='registration')
+    # path('', include('django.contrib.auth.urls')), excluded
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('registration/', RegistrationView.as_view(), name='registration'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('profile/', ProfileView.as_view(), name='profile'),
 ]

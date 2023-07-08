@@ -31,9 +31,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect, Http404
 from django.core.cache import cache
-
 from project.model_choices import ProductCacheKeys
-
 from django.db.models import OuterRef, Exists
 
 
@@ -141,13 +139,19 @@ class ProductsView(ListView):
             if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
-        favourite = FavouriteProduct.objects.filter(
-            product=OuterRef('pk'),
-            user=self.request.user
-        )
-        queryset = queryset.annotate(
-            is_favourite=Exists(favourite)
-        )
+        # favourite = FavouriteProduct.objects.filter(
+        #     product=OuterRef('pk'),
+        #     user=self.request.user
+        # )
+        # Проверка аутентификации пользователя
+        if self.request.user.is_authenticated:
+            favourite = FavouriteProduct.objects.filter(
+                product=OuterRef('pk'),
+                user=self.request.user
+            )
+            queryset = queryset.annotate(
+                is_favourite=Exists(favourite)
+            )
         return queryset
 
     # todo transfer to another place

@@ -1,15 +1,22 @@
+from django.contrib.auth.views import LoginView as AuthLoginView
 from django.contrib.auth import login
 from django.views.generic import CreateView
-
-from accounts.forms import RegistrationForm
-
-from project import settings
+# from accounts.forms import RegistrationForm, AuthenticationForm
+# from project import settings
+from django.urls import reverse_lazy
+from accounts.forms import RegistrationForm, AuthenticationForm
+# from django.views.generic import FormView, UpdateView, RedirectView
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+# from django.views.generic import TemplateView
 
 
 class RegistrationView(CreateView):
     form_class = RegistrationForm
     template_name = 'registration/registration.html'
-    success_url = settings.LOGIN_REDIRECT_URL
+    success_url = reverse_lazy("profile")
 
     def form_valid(self, form):
         user = form.save()
@@ -73,3 +80,52 @@ class RegistrationView(CreateView):
 #     def get(self, request, *args, **kwargs):
 #         logout(request)
 #         return super().get(request, *args, **kwargs)
+
+
+class LoginView(AuthLoginView):
+    form_class = AuthenticationForm
+
+
+class ProfileView(LoginRequiredMixin, View):
+    template_name = 'accounts/profile.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+        verification_code = request.POST.get('verification_code')
+
+        # Провалидировать номер телефона и проверить код
+        if self.check_verification_code(verification_code):
+            # Действия после успешной валидации
+            # ...
+
+            # Обновить модель пользователя
+            user = request.user
+            user.first_name = first_name
+            user.last_name = last_name
+            user.phone = phone
+            user.is_phone_valid = True
+            user.save()
+
+            messages.success(
+                request, 'Phone number is needed to be verified'
+            )
+            return redirect('login')
+        else:
+            messages.error(
+                request, 'Invalid phone number or verification code.'
+            )
+            return redirect('profile')
+
+    def check_verification_code(self, verification_code):
+        # Проверка кода верификации
+        return verification_code == '1234'
+
+    def phone_is_valid(self, phone):
+        # Провалидировать номер телефона
+        # ...
+        return True  # Измените на свою логику валидации номера телефона

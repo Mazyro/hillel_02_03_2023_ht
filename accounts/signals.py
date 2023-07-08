@@ -8,7 +8,7 @@ def post_save_user(created, **kwargs):
     instance = kwargs['instance']
     if created:
         # Используем имя из username для First Name
-        instance.first_name = instance.username
+        instance.first_name = instance.first_name
         # Задаем "No surname yet" для Last Name
         instance.last_name = 'No surname yet'
         instance.save()

@@ -1,8 +1,10 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, \
+    AuthenticationForm as AuthAuthenticationForm
 from django.contrib.auth import get_user_model
-
+from django import forms
 from django.core.exceptions import ValidationError
-
+from django.utils.translation import gettext_lazy as _
+from django.utils.text import capfirst
 User = get_user_model()
 
 
@@ -54,3 +56,18 @@ class RegistrationForm(UserCreationForm):
 #         if self.user is None:
 #             raise ValueError('Error')
 #         return self.cleaned_data
+
+class AuthenticationForm(AuthAuthenticationForm):
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=request, *args, **kwargs)
+        self.fields["username"].label = _(
+            f'{capfirst(self.username_field.verbose_name)} '
+            f'or Phone Number')
+
+
+class ProfileModelForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name',
+                  'email', 'phone', 'is_phone_valid')

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_extensions',
     'django_celery_beat',
+    'rosetta',
     # internal packages
     'products',
     'orders',
@@ -130,7 +131,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LOGIN_REDIRECT_URL = reverse_lazy("main")
-LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
+LOGOUT_REDIRECT_URL = reverse_lazy("login")
+AUTH_USER_MODEL = 'accounts.User'
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.auth_backends.EmailOrPhoneModelBackend'
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

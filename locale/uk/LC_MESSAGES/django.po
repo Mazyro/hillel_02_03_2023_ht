@@ -9,91 +9,71 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-05 00:43+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2023-07-05 01:16+0300\n"
+"Last-Translator: Alex Mazyrko <amazyrko@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: project/settings.py:140
 msgid "Ukrainian"
-msgstr ""
+msgstr "Українська"
 
 #: project/settings.py:141
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: templates/main/index.html:5
 msgid ""
 "\n"
-"            There are many variations of passages of Lorem Ipsum available, "
-"but the majority have suffered\n"
-"            alteration in some form, by injected humour, or randomised words "
-"which don't look even slightly\n"
-"            believable. If you are going to use a passage of Lorem Ipsum, "
-"you need to be sure there isn't\n"
-"            anything embarrassing hidden in the middle of text. All the "
-"Lorem Ipsum generators on the\n"
-"            Internet tend to repeat predefined chunks as necessary, making "
-"this the first true generator\n"
-"            on the Internet. It uses a dictionary of over 200 Latin words, "
-"combined with a handful of model\n"
-"            sentence structures, to generate Lorem Ipsum which looks "
-"reasonable. The generated Lorem Ipsum is\n"
-"            therefore always free from repetition, injected humour, or non-"
-"characteristic words etc.\n"
+"            There are many variations of passages of Lorem Ipsum available, but the majority have suffered\n"
+"            alteration in some form, by injected humour, or randomised words which don't look even slightly\n"
+"            believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't\n"
+"            anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the\n"
+"            Internet tend to repeat predefined chunks as necessary, making this the first true generator\n"
+"            on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model\n"
+"            sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is\n"
+"            therefore always free from repetition, injected humour, or non-characteristic words etc.\n"
 "        "
-msgstr "Існує багато варіацій уривків з Lorem Ipsum, але більшість з них зазнала певних змін на кшталт жартівливих вставок або змішування слів, які навіть не виглядають правдоподібно. Якщо ви збираєтесь використовувати Lorem Ipsum, ви маєте упевнитись в тому, що всередині тексту не приховано нічого, що могло б викликати у читача конфуз. Більшість відомих генераторів Lorem Ipsum в Мережі генерують текст шляхом повторення наперед заданих послідовностей Lorem Ipsum. Принципова відмінність цього генератора робить його першим справжнім генератором Lorem Ipsum. Він використовує словник з більш як 200 слів латини та цілий набір моделей речень - це дозволяє генерувати Lorem Ipsum, який виглядає осмислено. Таким чином, згенерований Lorem Ipsum не міститиме повторів, жартів, нехарактерних для латини слів і т.ін."
+msgstr ""
+"\n"
+"Існує багато варіацій уривків з Lorem Ipsum, але більшість з них зазнала певних змін на кшталт жартівливих вставок або змішування слів, які навіть не виглядають правдоподібно. Якщо ви збираєтесь використовувати Lorem Ipsum, ви маєте упевнитись в тому, що всередині тексту не приховано нічого, що могло б викликати у читача конфуз. Більшість відомих генераторів Lorem Ipsum в Мережі генерують текст шляхом повторення наперед заданих послідовностей Lorem Ipsum. Принципова відмінність цього генератора робить його першим справжнім генератором Lorem Ipsum. Він використовує словник з більш як 200 слів латини та цілий набір моделей речень - це дозволяє генерувати Lorem Ipsum, який виглядає осмислено. Таким чином, згенерований Lorem Ipsum не міститиме повторів, жартів, нехарактерних для латини слів і т.ін."
 
 #: templates/main/index.html:18
 msgid ""
 "\n"
-"        There are many variations of passages of Lorem Ipsum available, but "
-"the majority have suffered\n"
-"        alteration in some form, by injected humour, or randomised words "
-"which don't look even slightly\n"
-"        believable. If you are going to use a passage of Lorem Ipsum, you "
-"need to be sure there isn't\n"
-"        anything embarrassing hidden in the middle of text. All the Lorem "
-"Ipsum generators on the\n"
-"        Internet tend to repeat predefined chunks as necessary, making this "
-"the first true generator\n"
-"        on the Internet. It uses a dictionary of over 200 Latin words, "
-"combined with a handful of model\n"
-"        sentence structures, to generate Lorem Ipsum which looks reasonable. "
-"The generated Lorem Ipsum is\n"
-"        therefore always free from repetition, injected humour, or non-"
-"characteristic words etc.\n"
+"        There are many variations of passages of Lorem Ipsum available, but the majority have suffered\n"
+"        alteration in some form, by injected humour, or randomised words which don't look even slightly\n"
+"        believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't\n"
+"        anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the\n"
+"        Internet tend to repeat predefined chunks as necessary, making this the first true generator\n"
+"        on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model\n"
+"        sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is\n"
+"        therefore always free from repetition, injected humour, or non-characteristic words etc.\n"
 "   "
-msgstr "Існує багато варіацій уривків з Lorem Ipsum, але більшість з них зазнала певних змін на кшталт жартівливих вставок або змішування слів, які навіть не виглядають правдоподібно. Якщо ви збираєтесь використовувати Lorem Ipsum, ви маєте упевнитись в тому, що всередині тексту не приховано нічого, що могло б викликати у читача конфуз. Більшість відомих генераторів Lorem Ipsum в Мережі генерують текст шляхом повторення наперед заданих послідовностей Lorem Ipsum. Принципова відмінність цього генератора робить його першим справжнім генератором Lorem Ipsum. Він використовує словник з більш як 200 слів латини та цілий набір моделей речень - це дозволяє генерувати Lorem Ipsum, який виглядає осмислено. Таким чином, згенерований Lorem Ipsum не міститиме повторів, жартів, нехарактерних для латини слів і т.ін."
+msgstr ""
+"\n"
+"Існує багато варіацій уривків з Lorem Ipsum, але більшість з них зазнала певних змін на кшталт жартівливих вставок або змішування слів, які навіть не виглядають правдоподібно. Якщо ви збираєтесь використовувати Lorem Ipsum, ви маєте упевнитись в тому, що всередині тексту не приховано нічого, що могло б викликати у читача конфуз. Більшість відомих генераторів Lorem Ipsum в Мережі генерують текст шляхом повторення наперед заданих послідовностей Lorem Ipsum. Принципова відмінність цього генератора робить його першим справжнім генератором Lorem Ipsum. Він використовує словник з більш як 200 слів латини та цілий набір моделей речень - це дозволяє генерувати Lorem Ipsum, який виглядає осмислено. Таким чином, згенерований Lorem Ipsum не міститиме повторів, жартів, нехарактерних для латини слів і т.ін."
 
 #: templates/main/index.html:31
 msgid ""
 "\n"
-"        There are many variations of passages of Lorem Ipsum available, but "
-"the majority have suffered\n"
-"        alteration in some form, by injected humour, or randomised words "
-"which don't look even slightly\n"
-"        believable. If you are going to use a passage of Lorem Ipsum, you "
-"need to be sure there isn't\n"
-"        anything embarrassing hidden in the middle of text. All the Lorem "
-"Ipsum generators on the\n"
-"        Internet tend to repeat predefined chunks as necessary, making this "
-"the first true generator\n"
-"        on the Internet. It uses a dictionary of over 200 Latin words, "
-"combined with a handful of model\n"
-"        sentence structures, to generate Lorem Ipsum which looks reasonable. "
-"The generated Lorem Ipsum is\n"
-"        therefore always free from repetition, injected humour, or non-"
-"characteristic words etc.\n"
+"        There are many variations of passages of Lorem Ipsum available, but the majority have suffered\n"
+"        alteration in some form, by injected humour, or randomised words which don't look even slightly\n"
+"        believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't\n"
+"        anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the\n"
+"        Internet tend to repeat predefined chunks as necessary, making this the first true generator\n"
+"        on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model\n"
+"        sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is\n"
+"        therefore always free from repetition, injected humour, or non-characteristic words etc.\n"
 "    "
-msgstr "Існує багато варіацій уривків з Lorem Ipsum, але більшість з них зазнала певних змін на кшталт жартівливих вставок або змішування слів, які навіть не виглядають правдоподібно. Якщо ви збираєтесь використовувати Lorem Ipsum, ви маєте упевнитись в тому, що всередині тексту не приховано нічого, що могло б викликати у читача конфуз. Більшість відомих генераторів Lorem Ipsum в Мережі генерують текст шляхом повторення наперед заданих послідовностей Lorem Ipsum. Принципова відмінність цього генератора робить його першим справжнім генератором Lorem Ipsum. Він використовує словник з більш як 200 слів латини та цілий набір моделей речень - це дозволяє генерувати Lorem Ipsum, який виглядає осмислено. Таким чином, згенерований Lorem Ipsum не міститиме повторів, жартів, нехарактерних для латини слів і т.ін."
+msgstr ""
+"\n"
+"Існує багато варіацій уривків з Lorem Ipsum, але більшість з них зазнала певних змін на кшталт жартівливих вставок або змішування слів, які навіть не виглядають правдоподібно. Якщо ви збираєтесь використовувати Lorem Ipsum, ви маєте упевнитись в тому, що всередині тексту не приховано нічого, що могло б викликати у читача конфуз. Більшість відомих генераторів Lorem Ipsum в Мережі генерують текст шляхом повторення наперед заданих послідовностей Lorem Ipsum. Принципова відмінність цього генератора робить його першим справжнім генератором Lorem Ipsum. Він використовує словник з більш як 200 слів латини та цілий набір моделей речень - це дозволяє генерувати Lorem Ipsum, який виглядає осмислено. Таким чином, згенерований Lorem Ipsum не міститиме повторів, жартів, нехарактерних для латини слів і т.ін."
 
 #: templates/orders/cart.html:4
 msgid "Your cart"
@@ -537,8 +517,8 @@ msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/core/validators.py:264
 msgid ""
-"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or"
+" hyphens."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/core/validators.py:276
@@ -738,15 +718,15 @@ msgstr ""
 #: venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1489
 #, python-format
 msgid ""
-"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1497
 #, python-format
 msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
+"“%(value)s” value has the correct format (YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1502
@@ -765,8 +745,8 @@ msgstr ""
 #: venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1789
 #, python-format
 msgid ""
-"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
-"uuuuuu] format."
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/db/models/fields/__init__.py:1793
@@ -925,7 +905,8 @@ msgid "Many-to-many relationship"
 msgstr ""
 
 #. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the label
+#. characters will prevent the default label_suffix to be appended to the
+#. label
 #: venv/lib/python3.10/site-packages/django/forms/boundfield.py:184
 msgid ":?.!"
 msgstr ""
@@ -975,7 +956,8 @@ msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/forms/fields.py:622
 #, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid ""
+"Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
 "Ensure this filename has at most %(max)d characters (it has %(length)d)."
 msgstr[0] ""
@@ -1083,7 +1065,8 @@ msgid "The inline value did not match the parent instance."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/forms/models.py:1429
-msgid "Select a valid choice. That choice is not one of the available choices."
+msgid ""
+"Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/forms/models.py:1568
@@ -1543,10 +1526,10 @@ msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/views/csrf.py:127
 msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the “Referrer-Policy: no-referrer” header, please remove them. The "
-"CSRF protection requires the “Referer” header to do strict referer checking. "
-"If you’re concerned about privacy, use alternatives like <a "
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
+" including the “Referrer-Policy: no-referrer” header, please remove them. "
+"The CSRF protection requires the “Referer” header to do strict referer "
+"checking. If you’re concerned about privacy, use alternatives like <a "
 "rel=\"noreferrer\" …> for links to third-party sites."
 msgstr ""
 
@@ -1598,8 +1581,8 @@ msgstr ""
 #: venv/lib/python3.10/site-packages/django/views/generic/dates.py:652
 #, python-format
 msgid ""
-"Future %(verbose_name_plural)s not available because %(class_name)s."
-"allow_future is False."
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/views/generic/dates.py:692
@@ -1655,10 +1638,10 @@ msgstr ""
 #: venv/lib/python3.10/site-packages/django/views/templates/default_urlconf.html:221
 #, python-format
 msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" "
-"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
-"configured any URLs."
+"You are seeing this page because <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
+"and you have not configured any URLs."
 msgstr ""
 
 #: venv/lib/python3.10/site-packages/django/views/templates/default_urlconf.html:229

@@ -38,7 +38,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link disabled">{% if user.is_authenticated %}{% translate 'Hi,' %} {{ user.username }}!
+          <a class="nav-link disabled">{% if user.is_authenticated %}{% translate 'Hi,' %} {{ user }} {{ user.first_name }}!
           {% else %}{% translate 'Sign in to access content' %}
           {% endif %}</a>
         </li>
@@ -54,27 +54,27 @@
 
       <ul class="navbar-nav me-right mb-2 mb-lg-0">
           <li>
-                            <form action="{% url 'set_language' %}"
-                                  method="post" class="d-flex">
-                                {% csrf_token %}
-                                <input name="next" type="hidden"
-                                       value="{{ redirect_to }}">
-                                <select name="language" class="form-select">
-                                    {% get_current_language as LANGUAGE_CODE %}
-                                    {% get_available_languages as LANGUAGES %}
-                                    {% get_language_info_list for LANGUAGES as languages %}
-                                    {% for language in languages %}
-                                        <option value="{{ language.code }}"
-                                                {% if language.code == LANGUAGE_CODE %}
-                                                selected{% endif %}>
-                                            {{ language.name_local }}
-                                            ({{ language.code }})
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <input type="submit" value="Go" class="btn btn-primary">
-                            </form>
-                        </li>
+        <form action="{% url 'set_language' %}"
+              method="post" class="d-flex">
+            {% csrf_token %}
+            <input name="next" type="hidden"
+                   value="{{ redirect_to }}">
+            <select name="language" class="form-select">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <option value="{{ language.code }}"
+                            {% if language.code == LANGUAGE_CODE %}
+                            selected{% endif %}>
+                        {{ language.name_local }}
+                        ({{ language.code }})
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Go" class="btn btn-primary">
+        </form>
+    </li>
 
 
 
@@ -92,6 +92,10 @@
                         {% endif %}
                     </svg>
                 </a>
+            </li>
+          <li class="me-5 nav-item">
+                <a class="nav-link active" aria-current="page"
+                   href="{% url 'logout' %}">{% translate 'Logout' %}</a>
             </li>
          </ul>
       <form class="d-flex" role="search">
