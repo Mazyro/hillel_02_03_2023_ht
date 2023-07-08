@@ -13,8 +13,7 @@ class EmailOrPhoneModelBackend(ModelBackend):
             username = kwargs.get(UserModel.USERNAME_FIELD)
         if username is None or password is None:
             return
-        # user_params = {}
-        # user_params = Q(email=username) | Q(phone=username)
+
         try:
             validate_email(username)
             is_email = True

@@ -127,5 +127,5 @@ class ProfileView(LoginRequiredMixin, View):
 
     def phone_is_valid(self, phone):
         # Провалидировать номер телефона
-        # ...
+        # .....
         return True  # Измените на свою логику валидации номера телефона

@@ -70,4 +70,5 @@ class ProfileModelForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name',
-                  'email', 'phone', 'is_phone_valid')
+                  'email', 'phone', 'is_phone_valid'
+                  )
