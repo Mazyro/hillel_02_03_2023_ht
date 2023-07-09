@@ -10,9 +10,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect
-from django.contrib.auth import login as auth_login
+
 from django.utils.translation import gettext_lazy as _
 
 
@@ -90,11 +88,12 @@ class LoginView(AuthLoginView):
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
-        auth_login(self.request, form.get_user())
+        # auth_login(self.request, form.get_user())
         messages.success(
             self.request, _('Welcome back')
         )
-        return HttpResponseRedirect(self.get_success_url())
+        # return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form)
 
 
 class ProfileView(LoginRequiredMixin, View):

@@ -1,7 +1,7 @@
 import os
-
 from celery import Celery
 # from time import sleep
+from django.core.mail import mail_admins
 
 
 # Set the default Django settings module for the 'celery' program.
@@ -28,3 +28,11 @@ def debug_task(self, x, y):
     except TypeError as err:
         raise self.retry(exc=err)
     print(f'Request: {self.request!r}')
+
+
+@app.task(bind=True)
+def send_email_task(self, text, msg):
+    try:
+        mail_admins(text, msg)
+    except TimeoutError as err:
+        raise self.retry(exc=err)

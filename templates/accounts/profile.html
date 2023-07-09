@@ -3,8 +3,8 @@
 
 {% block content %}
    <h1 class="display-7 text-center my-3"> {% translate 'Your profile' %} </h1>
-    <div class="col-12 col-lg-2"></div>
-    <div class="col-12 col-lg-8">
+    <div class="col-12  col-lg-4 offset-lg-4 my-3 my-lg-5 " >
+
 
     <form method="post">
         {% csrf_token %}
@@ -44,4 +44,5 @@
             </ul>
         {% endif %}
     </form>
+    </div>
 {% endblock content %}
