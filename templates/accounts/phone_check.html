@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+
+{% block content %}
+<h1 class="display-7 text-center my-3"> {% translate 'Verification' %} </h1>
+    <div class="col-12 col-lg-2"></div>
+   <form method="post">
+        {% csrf_token %}
+    <div>
+            <label for="id_verification_code">{% translate "Verification Code" %}:</label>
+            <input type="text" class="form-control" id="id_verification_code" name="verification_code" required>
+
+
+        <button type="submit" class="btn btn-success">{% translate "Submit" %}</button>
+        <button type="reset" value="Reset" class="btn btn-danger">{% translate "Reset" %}</button>
+
+        </div>
+ </form>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock content %}

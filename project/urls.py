@@ -35,7 +35,7 @@ urlpatterns = [
     path('accounts/', include(accounts_urlpatterns)),
     path('', include(main_urlpatterns)),
     path('favourites/', include(favourites_urlpatterns)),
-    path('favourites/', include(favourites_urlpatterns)),
+
     # path('currencies/', include(currencies_urlpatterns)),
     path('set-language/', set_language, name='set_language'),
 ]

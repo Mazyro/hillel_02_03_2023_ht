@@ -96,36 +96,57 @@ class ProfileView(LoginRequiredMixin, View):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         phone = request.POST.get('phone')
-        verification_code = request.POST.get('verification_code')
 
-        # Провалидировать номер телефона и проверить код
-        if self.check_verification_code(verification_code):
+        # Провалидировать номер телефона
+        if self.phone_is_valid:
             # Действия после успешной валидации
             # ...
-
             # Обновить модель пользователя
             user = request.user
             user.first_name = first_name
             user.last_name = last_name
             user.phone = phone
-            user.is_phone_valid = True
+            user.is_phone_valid = False
             user.save()
 
             messages.success(
-                request, 'Phone number is needed to be verified'
+                request, 'Phone number is verified'
             )
-            return redirect('login')
+            return redirect('phone_check')
         else:
             messages.error(
                 request, 'Invalid phone number or verification code.'
             )
             return redirect('profile')
 
-    def check_verification_code(self, verification_code):
-        # Проверка кода верификации
-        return verification_code == '1234'
-
     def phone_is_valid(self, phone):
         # Провалидировать номер телефона
         # .....
-        return True  # Измените на свою логику валидации номера телефона
+        # Подумать над логикой валидации номера телефона
+        return True
+
+
+class PhoneCheckView(View):
+    template_name = 'accounts/phone_check.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        verification_code = request.POST.get('verification_code')
+        user = request.user
+
+        if self.check_verification_code(verification_code):
+            user.is_phone_valid = True
+            user.save()
+            messages.success(request, 'Phone number validated successfully.')
+            # Перенаправление на страницу main
+            return redirect('main')
+        else:
+            messages.error(request, 'Invalid verification code.')
+            # Остаемся на странице ввода кода верификации
+            return redirect('phone_check')
+
+    def check_verification_code(self, verification_code):
+        # Проверка кода верификации
+        return verification_code == '1234'
