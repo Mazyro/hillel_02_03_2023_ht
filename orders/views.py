@@ -85,6 +85,7 @@ class CartView(GetCurrentOrderMixin, FormView):
     # метод-хук, применяющий декоратор login_required
     # для требования аутентификации пользователя
     # перед доступом к представлению.
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
