@@ -11,6 +11,9 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
+from django.contrib.auth import login as auth_login
+from django.utils.translation import gettext_lazy as _
 
 
 class RegistrationView(CreateView):
@@ -85,6 +88,14 @@ class RegistrationView(CreateView):
 class LoginView(AuthLoginView):
     form_class = AuthenticationForm
 
+    def form_valid(self, form):
+        """Security check complete. Log the user in."""
+        auth_login(self.request, form.get_user())
+        messages.success(
+            self.request, _('Welcome back')
+        )
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class ProfileView(LoginRequiredMixin, View):
     template_name = 'accounts/profile.html'
@@ -110,12 +121,12 @@ class ProfileView(LoginRequiredMixin, View):
             user.save()
 
             messages.success(
-                request, 'Phone number is verified'
+                self.request, 'Phone number is verified'
             )
             return redirect('phone_check')
         else:
             messages.error(
-                request, 'Invalid phone number or verification code.'
+                self.request, 'Invalid phone number or verification code.'
             )
             return redirect('profile')
 

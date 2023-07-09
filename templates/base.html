@@ -13,8 +13,12 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   </head>
 <body class="{% block body_class %}{% endblock body_class %}" >
+
+    {% if messages %}
+        {% include 'parts/messages.html' %}
+    {% endif %}
     {% block header %}
-        {% include 'parts/header.html' %}
+    {% include 'parts/header.html' %}
     {% endblock header%}
         <section>
             <div class="container">

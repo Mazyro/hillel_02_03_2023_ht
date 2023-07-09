@@ -22,7 +22,7 @@
             <label for="id_last_name">{% translate "Last Name" %}:</label>
             <input type="{{ user.last_name.widget.input_type }}" class="form-control" id="id_last_name" name="last_name" required>
         </div>
-
+        <br><br>
         <div>
             <label for="id_phone">{% translate "*Phone Number" %}:</label>
             <br>
@@ -33,10 +33,7 @@
                class="btn btn-secondary"
                >{% translate "Send verification code" %}</button>
         </div>
-            <br><br>
-
-
-
+            <br>
         <button type="reset" value="Reset" class="btn btn-danger">{% translate "Reset" %}</button>
 
         {% if messages %}

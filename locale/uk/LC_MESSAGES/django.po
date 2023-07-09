@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-05 00:43+0300\n"
-"PO-Revision-Date: 2023-07-05 01:16+0300\n"
-"Last-Translator: Alex Mazyrko <amazyrko@gmail.com>\n"
+"POT-Creation-Date: 2023-07-09 22:04+0300\n"
+"PO-Revision-Date: 2023-07-09 22:15+0300\n"
+"Last-Translator: Alex Doe <amazyrko@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,13 +19,123 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: project/settings.py:140
+#: accounts/forms.py:65
+msgid "{capfirst(self.username_field.verbose_name)} "
+msgstr ""
+
+#: accounts/models.py:47
+msgid "first name"
+msgstr ""
+
+#: accounts/models.py:48
+msgid "last name"
+msgstr ""
+
+#: accounts/models.py:49
+msgid "email address"
+msgstr ""
+
+#: accounts/models.py:51
+msgid "staff status"
+msgstr ""
+
+#: accounts/models.py:54
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+
+#: accounts/models.py:58
+msgid "active"
+msgstr ""
+
+#: accounts/models.py:61
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: accounts/models.py:65
+msgid "date joined"
+msgstr ""
+
+#: accounts/models.py:76
+msgid "user"
+msgstr ""
+
+#: accounts/models.py:77
+msgid "users"
+msgstr ""
+
+#: project/settings.py:148
 msgid "Ukrainian"
 msgstr "Українська"
 
-#: project/settings.py:141
+#: project/settings.py:149
 msgid "English"
 msgstr "English"
+
+#: templates/accounts/phone_check.html:4
+msgid "Verification"
+msgstr "Верифікація"
+
+#: templates/accounts/phone_check.html:9
+msgid "Verification Code"
+msgstr "Код підтвердження"
+
+#: templates/accounts/phone_check.html:13
+msgid "Submit"
+msgstr "Виконати"
+
+#: templates/accounts/phone_check.html:14 templates/accounts/profile.html:37
+msgid "Reset"
+msgstr "Оновити"
+
+#: templates/accounts/profile.html:5 templates/accounts/profileI_test.html:8
+msgid "Your profile"
+msgstr "Профіль"
+
+#: templates/accounts/profile.html:16
+msgid "First Name"
+msgstr "Ім'я"
+
+#: templates/accounts/profile.html:22
+msgid "Last Name"
+msgstr "Прізвище"
+
+#: templates/accounts/profile.html:27
+msgid "*Phone Number"
+msgstr "*Номер телефону"
+
+#: templates/accounts/profile.html:29
+msgid "* Phone number is needed to be verified"
+msgstr "* Номер телефону необхідно підтвердити"
+
+#: templates/accounts/profile.html:34
+msgid "Send verification code"
+msgstr "Надіслати код"
+
+#: templates/accounts/profileI_test.html:4
+msgid "Profile"
+msgstr "Профіль"
+
+#: templates/accounts/profileI_test.html:15
+msgid "email:"
+msgstr "пошта:"
+
+#: templates/accounts/profileI_test.html:24
+msgid "First name:"
+msgstr "Ім'я:"
+
+#: templates/accounts/profileI_test.html:50
+msgid "Last name:"
+msgstr "Прізвище:"
+
+#: templates/accounts/profileI_test.html:73
+msgid "Phone number:"
+msgstr "Номер телефону:"
+
+#: templates/accounts/profileI_test.html:80
+msgid " -- Phone number is needed to be verified"
+msgstr "-- Номер телефону необхідно підтвердити"
 
 #: templates/main/index.html:5
 msgid ""
@@ -114,6 +224,10 @@ msgstr "Привіт,"
 #: templates/parts/header.html:42
 msgid "Sign in to access content"
 msgstr "Увійти для доступу до контенту"
+
+#: templates/parts/header.html:98
+msgid "Logout"
+msgstr "Вихід"
 
 #: venv/lib/python3.10/site-packages/IPython/core/tests/test_completer.py:420
 msgid "open('foo"

@@ -9,6 +9,8 @@ from django.views.generic import FormView, RedirectView
 from orders.mixins import GetCurrentOrderMixin
 from orders.forms import CartForm, CartActionForm
 from django.http import HttpResponseRedirect
+from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 
 # rewritte in OOP
@@ -80,7 +82,6 @@ class CartView(GetCurrentOrderMixin, FormView):
     form_class = CartForm
     template_name = 'orders/cart.html'
     # : указывает URL, на который будет перенаправлен
-
     # метод-хук, применяющий декоратор login_required
     # для требования аутентификации пользователя
     # перед доступом к представлению.
@@ -156,4 +157,7 @@ class CartActionView(GetCurrentOrderMixin, RedirectView):
                 form.action(kwargs.get('action'))
                 return HttpResponseRedirect(reverse('cart'))
         form.action(kwargs.get('action'))
+        messages.success(
+            self.request, _('Added')
+        )
         return self.get(request, *args, **kwargs)

@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load i18n %}
 <title>{% block title %}Products{% endblock title %}</title>
 
 {% block content %}
 <a class="nav-link"
    href="{% if user.is_authenticated %}{% url 'export_products_to_csv' %}{% else %}{% endif %}">
-    {% if user.is_authenticated %}Экспорт в CSV{% else %}{% endif %}
+    {% if user.is_authenticated %}Export in CSV{% else %}{% endif %}
 </a>
 
 <a class="nav-link"
    href="{% url 'export_products_to_pdf' %}">
-    Экспорт в PDF
+    Export in PDF
 </a>
 
 <a class="nav-link"
@@ -19,7 +19,7 @@
      {% url 'products_from_csv' %}
      {% endif %}
      ">
-    {% if user.is_superuser %}Импорт из CSV{% else %}{% endif %}
+    {% if user.is_superuser %}Import from CSV{% else %}{% endif %}
 </a>
 
 
@@ -44,7 +44,7 @@
             <form method="post" action="{% url 'cart_action' 'add' %}">
                 {% csrf_token %}
                 <input type="hidden" name="product_id" value="{{ product.id }}">
-                <input type="submit" value="В корзину" class="btn btn-primary w-100">
+                <input type="submit" value="{% translate 'Add to cart' %}" class="btn btn-primary w-100">
             </form>
             {% if user.is_authenticated %}
 
