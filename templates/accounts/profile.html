@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+   <h1 class="display-7 text-center my-3"> {% translate 'Your profile' %} </h1>
+    <div class="col-12  col-lg-4 offset-lg-4 my-3 my-lg-5 " >
+
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            {% if user.first_name %}
+                {{ user.first_name }}
+            {% else %}
+            <label for="id_first_name">{% translate "First Name" %}:</label>
+            <input type="{{ user.first_name.widget.input_type }}" class="form-control" id="id_first_name" name="first_name" required>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="id_last_name">{% translate "Last Name" %}:</label>
+            <input type="{{ user.last_name.widget.input_type }}" class="form-control" id="id_last_name" name="last_name" required>
+        </div>
+        <br><br>
+        <div>
+            <label for="id_phone">{% translate "*Phone Number" %}:</label>
+            <br>
+            <span class="text-danger"> {% translate '* Phone number is needed to be verified' %} </span>
+            <input type="{{ user.phone.widget.input_type }}" class="form-control" id="id_phone" name="phone" required>
+            <br>
+                <button type="submit"
+               class="btn btn-secondary"
+               >{% translate "Send verification code" %}</button>
+        </div>
+            <br>
+        <button type="reset" value="Reset" class="btn btn-danger">{% translate "Reset" %}</button>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </form>
+    </div>
+{% endblock content %}

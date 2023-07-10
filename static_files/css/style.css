@@ -1,0 +1,20 @@
+.logo {
+    width: 90px;
+}
+
+.product-img {
+    max-width: 190px;
+}
+
+.price-value {
+    font-size: 24px;
+}
+
+.sub-product .product-img {
+    max-height:90px !important;
+}
+
+.sub-product .product-name {
+    max-width: 250px;
+    font-size: 12px;
+}

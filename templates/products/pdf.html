@@ -1,0 +1,18 @@
+{% load static $}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+<div>
+    <img style="width: 100px" src="{{ 'assets/images/pngwing.com.png' }}">
+    <img id="logo" style="width: 100px" src="https://s.ek.ua/jpg_zoom1/2258137.jpg">
+</div>
+<h1>{% now 'jS F Y H:i' %}</h1>
+{% for product in products.iterator %}
+    {{ product.name }}--{{ product.price }}--{{ product.sku }}--{{ product.created_at }}
+{% endfor %}
+</body>
+</html>
