@@ -193,7 +193,7 @@ def export_csv(request, *args, **kwargs):
     return response
 
 
-def export_csv_tameplate(request, *args, **kwargs):
+def export_csv_template(request, *args, **kwargs):
     # products_list = Product.objects.all()
 
     headers = {
@@ -227,14 +227,12 @@ class ExportToPdf(TemplateView):
         return response
 
 
-"""класс наследуется от FormView, который предоставляет функциональность
-для работы с формами.# Декораторы login_required и user_passes_test
-используются для проверки аутентификации пользователя и его статуса
-(должен быть сотрудником), чтобы разрешить доступ только
-авторизованным сотрудникам."""
-
-
 class ImportCSV(FormView):
+    """класс наследуется от FormView, который предоставляет функциональность
+    для работы с формами.# Декораторы login_required и user_passes_test
+    используются для проверки аутентификации пользователя и его статуса
+    (должен быть сотрудником), чтобы разрешить доступ только
+    авторизованным сотрудникам."""
     form_class = ImportCSVForm
     template_name = 'products/import_csv.html'
     success_url = reverse_lazy('products')
@@ -312,3 +310,7 @@ class AddOrRemoveFavoriteProduct(DetailView):
             favourite.delete()
             return HttpResponseRedirect(favourites_url)
         return HttpResponseRedirect(products_url)
+
+
+class ProductByCategory(ListView):
+    pass

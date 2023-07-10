@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block body_class %}contacts{% endblock body_class %}
+{% block content %}
+<div class="col-12  col-lg-4 offset-lg-4 my-3 my-lg-5 " >
+    <h2>{% translate 'Contact Us' %}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {% include 'parts/form.html' with form=form %}
+        <input type="submit" class="btn btn-primary w-100 mt-3" value="{% translate 'Send' %}">
+    </form>
+</div>
+
+{% endblock content%}
