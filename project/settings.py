@@ -92,6 +92,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'project.context_processors.slug_categories',
             ],
         },
     },
@@ -212,6 +213,8 @@ CACHES = {
         "TIMEOUT": 3600,
     }
 }
+
+APPEND_SLASH = True
 
 # ADMINS = env.list('ADMINS', default='ADMINS')
 ADMINS = (("Admin", "amazyrko@gmail.com"), )

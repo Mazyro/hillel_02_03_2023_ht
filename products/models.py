@@ -51,7 +51,6 @@ class Category(LifecycleModelMixin, PKMixin):
 
 
 class Product(LifecycleModelMixin, PKMixin):
-
     name = models.CharField(max_length=255)
     description = models.TextField(
         blank=True,  # empty to Django

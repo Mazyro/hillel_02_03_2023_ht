@@ -23,7 +23,7 @@ import csv
 # from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from products.forms import ImportCSVForm
-from products.models import Product, FavouriteProduct
+from products.models import Product, FavouriteProduct, Category
 from django.http import HttpResponse
 from django.template.loader import render_to_string  # get_template,
 from django.urls import reverse_lazy
@@ -313,4 +313,22 @@ class AddOrRemoveFavoriteProduct(DetailView):
 
 
 class ProductByCategory(ListView):
-    pass
+    context_object_name = 'products'
+    model = Product
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category = None
+
+    def dispatch(self, request, *args, **kwargs):
+        # breakpoint()
+        try:
+            self.category = Category.objects.get(slug=kwargs['slug'])
+        except Category.DoesNotExist:
+            raise Http404
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        # qs = super().get_queryset()
+        # breakpoint()
+        return super().get_queryset().filter(categories__in=(self.category,))
