@@ -27,3 +27,8 @@ class ProductCacheKeys(TextChoices):
 # for further use in set/get cache
 class FeedbackCacheKeys(TextChoices):
     FEEDBACKS = 'feedbacks', 'Feedbacks all'
+
+
+# for further use in set/get cache
+class CurrencyCacheKeys(TextChoices):
+    CURRENCIES = 'currencies', 'Currencies all'

@@ -1,11 +1,25 @@
-from django.views.generic import TemplateView
+from django.core.cache import cache
+
+from django.views.generic import ListView
 from currencies.models import CurrencyHistory
+from project.model_choices import CurrencyCacheKeys
 
 
-class HeaderView(TemplateView):
-    template_name = 'parts/header.html'
+class CurrencyView(ListView):
+    model = CurrencyHistory
+    template_name = 'parts/curr.html'
+    context_object_name = 'currency_rates'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['currency_rates'] = CurrencyHistory.objects.all()
-        return context
+    def get_queryset(self):
+        queryset = cache.get(CurrencyCacheKeys.CURRENCIES)
+        if not queryset:
+            print('TO CACHE')
+            queryset = CurrencyHistory.objects.all()
+            cache.set(CurrencyCacheKeys.CURRENCIES, queryset)
+
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        return queryset

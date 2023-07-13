@@ -35,7 +35,7 @@ SECRET_KEY = env.str('SECRET_KEY', default='SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
-
+ENABLE_SILK = env.bool('ENABLE_SILK', default=False)
 
 # Application definition
 
@@ -63,6 +63,9 @@ INSTALLED_APPS = [
     'currencies'
 ]
 
+if ENABLE_SILK:
+    INSTALLED_APPS.append('silk')
+
 MIDDLEWARE = [
 
     'django.middleware.security.SecurityMiddleware',
@@ -79,6 +82,9 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
+if ENABLE_SILK:
+    MIDDLEWARE.append('silk.middleware.SilkyMiddleware')
+
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
@@ -93,6 +99,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'project.context_processors.slug_categories',
+
             ],
         },
     },

@@ -5,7 +5,8 @@ from products.models import Product, Category
 
 @admin.register(Product)
 class ProductAdmin(ImageSnapshotAdminMixin, admin.ModelAdmin):
-    list_display = ('name', 'price', 'created_at', 'sku', 'categories_list', 'is_active')
+    list_display = ('name', 'price', 'created_at', 'sku',
+                    'categories_list', 'is_active')
     filter_horizontal = ('categories', 'products')
 
     def categories_list(self, obj):

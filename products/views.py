@@ -127,12 +127,10 @@ class ProductsView(ListView):
     model = Product
 
     def get_queryset(self):
-        queryset = cache.get(ProductCacheKeys.PRODUCTS)
-
+        queryset = cache.get(ProductCacheKeys.PRODUCTS).\
+            exclude(categories__name='Accessories')
         if not queryset:
             print('TO CASH')
-            # exclude accessories
-            queryset = Product.objects.exclude(categories__name='Accessories')
             cache.set(ProductCacheKeys.PRODUCTS, queryset)
         ordering = self.get_ordering()
         if ordering:
@@ -329,6 +327,15 @@ class ProductByCategory(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        # qs = super().get_queryset()
-        # breakpoint()
-        return super().get_queryset().filter(categories__in=(self.category,))
+        qs = super().get_queryset()
+        qs = qs.filter(categories=self.category)
+        # qs = qs.filter(categories__in=(self.category,))
+        qs = qs.prefetch_related('products', 'categories')
+        return qs
+        # return qs.filter(categories__in=(self.category,))
+
+    """
+            select_related  - FK, OneToOne
+            prefetch_related - ManyToMany
+            :return:
+    """

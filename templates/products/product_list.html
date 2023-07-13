@@ -4,6 +4,7 @@
 <title>{% block title %}Products{% endblock title %}</title>
 
 {% block content %}
+
 <a class="nav-link"
    href="{% if user.is_authenticated %}{% url 'export_products_to_csv' %}{% else %}{% endif %}">
     {% if user.is_authenticated %}Export in CSV{% else %}{% endif %}
@@ -27,12 +28,12 @@
 <div class="col-12 {% if product.sub_products.exists %}col-lg-6{% else %}col-lg-3{% endif %} mt-3 mt-lg-5">
     <div class="card">
         <a href="{% url 'product' product.id %}">
-        {% if product.image %}
-        <img src="{{ product.image.url }}" class="product-img p-3" alt="{{ product.name }}">
-        {% else %}
-        <img src="{% static 'images/pngwing.com.png' %}" class="product-img p-3" alt="{{ product.name }}">
-        {% endif %}
-            </a>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="product-img p-3" alt="{{ product.name }}">
+            {% else %}
+            <img src="{% static 'images/pngwing.com.png' %}" class="product-img p-3" alt="{{ product.name }}">
+            {% endif %}
+        </a>
         <div class="card-body">
             <h5 class="card-title">{{ product.name }} {{product.sku}}</h5>
             {% for category in product.categories.iterator %}
@@ -63,7 +64,6 @@
             {% endif %}
         </div>
 
-        {% if product.products.exists %}
         <p class="p-3">Including</p>
         {% for sub in product.products.iterator %}
         <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
@@ -73,7 +73,7 @@
             </figure>
         </div>
         {% endfor %}
-        {% endif %}
+
     </div>
 </div>
 {% endfor %}

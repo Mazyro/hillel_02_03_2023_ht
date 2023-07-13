@@ -55,3 +55,6 @@ if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
         path('rosetta/', include('rosetta.urls'))
     ]
+
+if settings.ENABLE_SILK:
+    urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
