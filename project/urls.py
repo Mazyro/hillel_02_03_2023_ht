@@ -57,4 +57,6 @@ if 'rosetta' in settings.INSTALLED_APPS:
     ]
 
 if settings.ENABLE_SILK:
-    urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
+    urlpatterns += [path('silk/', include('silk.urls', namespace='silk')),
+                    path("__debug__/", include("debug_toolbar.urls"))
+                    ]

@@ -21,19 +21,20 @@ class RegistrationForm(UserCreationForm):
 
         return ValidationError('User already exists')
 
-    def clean(self):
-        self.cleaned_data['username'] = self.cleaned_data[
-            'email'
-        ].split('@')[0]
-        return self.cleaned_data
+    # does not need, test showed
+    # def clean(self):
+    #     self.cleaned_data['username'] = self.cleaned_data[
+    #         'email'
+    #     ].split('@')[0]
+    #     return self.cleaned_data
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.username = self.cleaned_data['username']
-        user.set_password(self.cleaned_data['password1'])
-        if commit:
-            user.save()
-        return user
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     user.username = self.cleaned_data['username']
+    #     user.set_password(self.cleaned_data['password1'])
+    #     if commit:
+    #         user.save()
+    #     return user
 
 
 # ===========================================================================

@@ -127,11 +127,16 @@ class ProductsView(ListView):
     model = Product
 
     def get_queryset(self):
-        queryset = cache.get(ProductCacheKeys.PRODUCTS).\
-            exclude(categories__name='Accessories')
-        if not queryset:
+        # cache.clear()
+        queryset = cache.get(ProductCacheKeys.PRODUCTS)
+        if queryset is None:
             print('TO CASH')
+            queryset = Product.objects.prefetch_related(
+                'categories', 'products')\
+                .all()
             cache.set(ProductCacheKeys.PRODUCTS, queryset)
+        else:
+            queryset = queryset.exclude(categories__name='Accessories')
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
@@ -193,9 +198,8 @@ def export_csv(request, *args, **kwargs):
 
 def export_csv_template(request, *args, **kwargs):
     # products_list = Product.objects.all()
-
     headers = {
-        'Content-Tpe': 'text/csv',
+        'Content-Type': 'text/csv',
         'Content-Disposition': 'attachment; filename="products.csv"'
     }
     fields_name = [

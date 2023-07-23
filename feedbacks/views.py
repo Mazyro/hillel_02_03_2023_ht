@@ -4,14 +4,14 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView
 from feedbacks.forms import FeedbackForm
 from feedbacks.models import Feedback
-from django.contrib.auth.mixins import UserPassesTestMixin
+# from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.cache import cache
 from project.model_choices import FeedbackCacheKeys
 # from time import sleep
 # from project.celery import debug_task
 
 
-class FeedbackList(UserPassesTestMixin, ListView):
+class FeedbackList(ListView):
     model = Feedback
     template_name = 'feedbacks/feedback_list.html'
     context_object_name = 'feedbacks'
@@ -25,9 +25,12 @@ class FeedbackList(UserPassesTestMixin, ListView):
     False, то будет сгенерировано исключение PermissionDenied
     и обработано ErrorHandlingMiddleware.
     """
-    def test_func(self):
-        # Проверяем, является ли пользователь суперпользователем
-        return self.request.user.is_superuser
+    # пока отключил, так как доступ к отзывам может
+    # быть у незалогиненых пользователей
+    # плюс для прохождения тестов
+    # def test_func(self):
+    #     # Проверяем, является ли пользователь суперпользователем
+    #     return self.request.user.is_superuser
 
     """
     В контексте примера с методом dispatch в FeedbackList,

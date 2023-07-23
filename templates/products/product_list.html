@@ -63,7 +63,7 @@
             <p><a href="{% url 'login' %}">Login</a> to add this product to your favourites.</p>
             {% endif %}
         </div>
-
+        {% if product.products.exists %}
         <p class="p-3">Including</p>
         {% for sub in product.products.iterator %}
         <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
@@ -73,7 +73,7 @@
             </figure>
         </div>
         {% endfor %}
-
+        {% endif %}
     </div>
 </div>
 {% endfor %}

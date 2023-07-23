@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "debug_toolbar",
     # external packages
     'widget_tweaks',
     'django_celery_results',
@@ -83,7 +84,14 @@ MIDDLEWARE = [
 ]
 
 if ENABLE_SILK:
-    MIDDLEWARE.append('silk.middleware.SilkyMiddleware')
+    MIDDLEWARE.append('silk.middleware.SilkyMiddleware',)
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
 
 ROOT_URLCONF = 'project.urls'
 
