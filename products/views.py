@@ -125,6 +125,7 @@ class ProductsView(ListView):
     # template_name = 'products/product_list.html'  no need
     context_object_name = 'products'
     model = Product
+    ordering = 'created_at'
 
     def get_queryset(self):
         # cache.clear()

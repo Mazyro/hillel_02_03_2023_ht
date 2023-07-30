@@ -1,12 +1,10 @@
 import csv
 import decimal
 from io import StringIO
-
 from django import forms
 from products.models import Product, Category
 from project.constants import MAX_DIGITS, DECIMAL_PLACES
 from django.core.exceptions import ValidationError
-
 from django.core.validators import FileExtensionValidator
 
 

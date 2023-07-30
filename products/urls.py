@@ -13,7 +13,12 @@ class UUIDConverter(StringConverter):  # noqa
 
 urlpatterns = [
     path('', ProductsView.as_view(), name='products'),
+
     path('<uuid:pk>', ProductDetail.as_view(), name='product'),
+    # path('<uuid:pk>/<slug:slug>/', ProductDetail.as_view(), name='product'),
+    # path('<uuid:pk>/<str:slug>/', ProductDetail.as_view(), name='product'),
+
+
     path('products/export-csv/', export_csv, name='export_products_to_csv'),
     path('products/export-pdf/', ExportToPdf.as_view(),
          name='export_products_to_pdf'),
