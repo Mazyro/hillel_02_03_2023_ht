@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load i18n %}
+<title>{% block title %}
+    {% translate 'Your cart' %}
+{% endblock title %}</title>
+
+{% block content %}
+    <div class="col-12 my-3 my-lg-5">
+        {% if order_items %}
+            <h2 class="position-relative start-50">Your cart</h2>
+            <form method="post">
+                {% csrf_token %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Prices</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <th scope="row"
+                                class="1">{{ forloop.counter }}</th>
+                            <td>
+                                {{ item.product.name }}
+                                <input type="hidden"
+                                       id="item_id_{{ forloop.counter }}"
+                                       name="item_{{ forloop.counter }}"
+                                       value="{{ item.id }}">
+                            </td>
+                            <td class="col-1">
+                                <input class="form-control" type="number"
+                                       id="quantity_id_{{ forloop.counter }}"
+                                       value="{{ item.quantity }}"
+                                       name="quantity_{{ forloop.counter }}"
+                                       min="1">
+                            </td>
+                            <td class="col-1">
+                                {{ item.product.price }}
+                            </td>
+                            <td class="col-1">
+                                {{ item.sub_total }}
+                            </td>
+                            <td class="col-1">
+                                <input type="hidden" name="order_item_id"
+                                       value="{{ item.id }}">
+                                <button type="submit" class="btn follow" name="remove_item"
+                                        formaction="{% url 'cart_action' 'remove' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                         fill="red"
+                                         class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total :</td>
+
+                        <td>{{ order.total_amount }}</td>
+                    </tr>
+                    </tbody>
+                    <tr>
+                        <td></td>
+                        {#                        <td></td>#}
+                        {% if not order.discount %}
+                            <td><label for="id_discount">
+                                Have a discount code? Please enter here.
+                            </label></td>
+                            <td><input class="form-control" id="id_discount"
+                                       type="text"
+                                       name="discount"></td>
+
+                        {% else %}
+                            <td colspan="2">
+                               You already applied discount.
+                            </td>
+                        {% endif %}
+                        <td><input type="submit" class="btn btn-primary"
+                                   name="recalculate" value="Recalculate"></td>
+                    </tr>
+                </table>
+            </form>
+            <form method="post" action="{% url 'cart_action' 'pay' %}">
+                {% csrf_token %}
+                <input type="submit" value="Pay order"
+                       class="btn btn-warning w-100">
+            </form>
+
+            <form method="post" action="{% url 'cart_action' 'clear' %}">
+                {% csrf_token %}
+                <input type="submit" value="Clear this order"
+                       class="col-2 btn btn-info position-relative start-50 mt-5">
+            </form>
+
+            {% if form.errors %}
+                <div class="mb-2">
+                    <ul>
+                        {% for error in form.errors %}
+                            <li class="text-danger small">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if form.non_field_errors %}
+                <div class="mb-2">
+                    <ul>
+                        {% for error in form.non_field_errors %}
+                            <li class="text-danger small">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% else %}
+            <h2>Your cart is empty.</h2>
+            <p><a href="{% url 'products' %}">Return to products</a></p>
+        {% endif %}
+    </div>
+{% endblock content %}

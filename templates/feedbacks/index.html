@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-3" >
+    <h2>Оставьте отзыв</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {% include 'parts/form.html' with form=form %}
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+</div>
+<p><a href="{% url 'feedbacks' %}">Все отзывы</a></p>
+{% endblock content%}
+
+
+
+
+

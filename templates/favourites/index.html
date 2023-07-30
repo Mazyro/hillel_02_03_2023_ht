@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+<style>
+    .card_card {
+    height: 2000px;
+}
+</style>
+{% load static %}
+
+{% block content %}
+
+{% for favourite in favourites %}
+
+    <div class="col-12 {% if favourite.product.sub_products.exists %}col-lg-6{% else %}col-lg-3{% endif %} mt-3 mt-lg-5">
+        <div class="card" >
+
+            {% if favourite.product.image %}
+                <img src="{{ favourite.product.image.url }}" class="product-img p-3" alt="{{ favourite.product.name }}">
+            {% else %}
+                <img src="{% static 'images/pngwing.com.png' %}" class="product-img p-3" alt="{{ favourite.product.name }}">
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title">{{ favourite.product.name }}</h5>
+
+                    {% for category in favourite.product.categories.iterator %}
+                        <span class="text-success"> {{ favourite.category.name }} </span>
+                    {% endfor %}
+
+                <span class="price-value"><p class="card-text">{{ favourite.product.price }} UAH</p></span>
+                <p class="card-text">{{ favourite.product.description|truncatewords:"12" }}</p>
+                <form method="post" action="{% url 'cart_action' 'add' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ favourite.product.id }}">
+                    <input type="submit" value="В корзину" class="btn btn-primary w-100">
+                </form>
+                {% if user.is_authenticated %}
+                    {% if favourite.product.is_favourite %}
+                        <p>This product is in your favourites.</p>
+                    {% else %}
+                        <br>
+                       <form method="post" action="{% url 'add_to_favourite' favourite.product.id %}">
+                        {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ favourite.product.id }}">
+                            <input type="submit" value="Remove from Favourite" class="btn btn-danger w-100">
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <p><a href="{% url 'login' %}">Login</a> to add this product to your favourites.</p>
+                {% endif %}
+            </div>
+            {% if favourite.product.products.exists %}
+                <p class="p-3">Including</p>
+                {% for sub in favourite.product.products.iterator %}
+                    <div class="d-inline-flex flex-column rounded border p-2 m-1 sub-product">
+                        <p class="product-name">{{ sub.name }}</p>
+                        <figure class="text-center d-inline">
+                            <img src="{{ sub.image.url }}" class="product-img p-3" alt="{{ favourite.product.name }}">
+                        </figure>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+{% empty %}
+    <div class="col-12 col-lg-3 offset-lg-3">
+        <h2>Favourite products</h2>
+        <p><a href="{% url 'products' %}">Products</a></p>
+    </div>
+{% endfor %}
+
+{% endblock content %}
